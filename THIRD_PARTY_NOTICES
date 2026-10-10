@@ -1,0 +1,92 @@
+THIRD-PARTY NOTICES for Kinetica
+
+Kinetica bundles dictionary data derived from the sources below. The
+application code is licensed under the GNU General Public License v3.0
+(see LICENSE); the data licenses follow.
+
+--------------------------------------------------------------------------
+1. Word frequency lists
+   (en_wordlist.txt, it_wordlist.txt, es_wordlist.txt, pl_wordlist.txt,
+   cs_wordlist.txt, nl_wordlist.txt, de_wordlist.txt, fr_wordlist.txt,
+   no_wordlist.txt, ru_wordlist.txt, he_wordlist.txt, ar_wordlist.txt,
+   uk_wordlist.txt, and en_gb_variants.txt, which is derived from
+   en_wordlist.txt by orthographic rule and adds no new data)
+
+Derived from hermitdave/FrequencyWords (OpenSubtitles 2018 frequency lists):
+https://github.com/hermitdave/FrequencyWords
+
+MIT License
+
+Copyright (c) 2016 Hermit Dave
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--------------------------------------------------------------------------
+2. Bigram tables
+   (en_bigrams.txt, it_bigrams.txt, es_bigrams.txt, pl_bigrams.txt,
+   cs_bigrams.txt, nl_bigrams.txt, de_bigrams.txt, fr_bigrams.txt,
+   no_bigrams.txt, ru_bigrams.txt, he_bigrams.txt, ar_bigrams.txt,
+   uk_bigrams.txt)
+
+   German noun capitalization in de_wordlist.txt is also derived from this
+   corpus: the display spellings come from the case Tatoeba preserves.
+   So are the Ukrainian words with an apostrophe in uk_wordlist.txt, and
+   which Ukrainian words it keeps: a word is kept by its use in the
+   Ukrainian sentences. In the accented languages, which spellings with
+   the accents left off a wordlist keeps is decided the same way.
+
+Word-pair counts derived from the Tatoeba sentence corpora:
+https://tatoeba.org
+
+License: Creative Commons Attribution 2.0 France (CC BY 2.0 FR)
+https://creativecommons.org/licenses/by/2.0/fr/
+Attribution: tatoeba.org
+
+--------------------------------------------------------------------------
+3. AOSP LatinIME wordlists
+
+Kinetica can import an AOSP-format "wordlist.combined" dictionary supplied
+by the user (Settings > Dictionary). The Turkish dictionary build/test path
+can also merge the AOSP-derived main_tr.combined wordlist from:
+https://codeberg.org/Helium314/aosp-dictionaries
+
+The AOSP LatinIME wordlists are licensed under the Apache License, Version 2.0:
+https://www.apache.org/licenses/LICENSE-2.0
+The downloaded source is not committed as a raw file. When the optional AOSP
+merge is used, the resulting Turkish wordlist includes surface forms from this
+Apache-licensed source. Keep this notice with builds made using that merge.
+
+--------------------------------------------------------------------------
+4. Emoji data (emoji_data.json)
+
+Hand-curated for this project (names and search keywords); Unicode emoji
+characters themselves are not subject to these notices.
+
+---------------------------------------------------------------------------
+Additional build-time tool: Zemberek-NLP Turkish morphology
+Version: 0.17.1
+Source: https://github.com/ahmetaa/zemberek-nlp
+License: Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0
+
+Kinetica uses Zemberek-NLP only in the build/CI environment to propose a
+bounded set of Turkish noun/verb inflected surface forms. The morphology
+library and its full lexicon are not included in the Android APK. Generated
+forms are filtered, frequency-capped and limited before inclusion in the
+Turkish wordlist. Zemberek remains a separately licensed third-party tool.

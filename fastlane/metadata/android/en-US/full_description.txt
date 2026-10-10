@@ -1,0 +1,46 @@
+Kinetica is a keyboard for two thumbs at once. Each thumb swipes or taps on its
+own, at the same time as the other, and the two streams merge into one word.
+
+Typing "something": the left thumb taps S, then E, while the right thumb swipes
+O -> M and then T -> H -> I -> N -> G. Kinetica merges them into S + OM + E +
+THING.
+
+It is a spiritual successor to the discontinued Nintype, written from scratch on
+Android's public IME APIs: not a fork, and no third-party gesture or prediction
+library. The dynamic time warping, the trie search and the two-thumb merge are
+all in the app.
+
+The app declares no INTERNET permission, so nothing you type can leave the
+phone. Decoding, prediction and learning run on the device, and password or
+private fields turn off suggestions, trails and learning.
+
+Features
+
+* Two thumbs, each read with its own cursor, so a word can pass between them in
+  any order; one tap can stand for a double letter
+* English, Italian, Spanish, Polish, Czech, Dutch, German, French and Norwegian,
+  plus Russian, Ukrainian, Hebrew and Arabic as experimental: 46k to 50k words
+  per language with real corpus frequencies. Accented words are drawn on their
+  base keys and restored on commit
+* Several languages at once: mix two in the suggestions, or let the keyboard
+  follow the language you are typing
+* Next-word suggestions, recent words on the bar, and a correction strip right
+  after each word
+* Tap inside a word you wrote to swap it for another
+* Tap autocorrect with three levels; backspace right after it undoes it
+* Your words rank higher as you use them; slide a suggestion to raise, lower or
+  block it
+* Chords on ?123 or the spacebar, edge swipes on any key, and text expansions:
+  type text, run an action, or press Ctrl and a key
+* Long-press menus as grids, with your own list for every letter
+* Optional numbers row, a wider middle row, landscape split, one-handed and
+  split modes, adjustable height and margins
+* Peck-type mode for slang and code: every tap types exactly its letter
+* Dark, light, Material You or your own colour
+* Backup of every setting, learned word and shortcut in one file
+* Settings in English and Italian, with short tips and a two-thumb tutor
+
+Source, build instructions and the full feature list:
+https://github.com/EZ-eta/kinetica
+
+If Kinetica is useful to you: https://ko-fi.com/ez_eta

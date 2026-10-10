@@ -1,0 +1,129 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
+}
+
+// THIRD_PARTY_NOTICES ships inside the APK (Settings > Open-source licenses),
+// copied from the repo root at build time so the file and the in-app screen
+// cannot drift.
+def noticesDir = layout.buildDirectory.dir('generated/notices')
+
+// Release signing is optional: builds stay green without a keystore, and
+// keystore.properties never enters version control.
+def keystoreProps = new Properties()
+def keystorePropsFile = rootProject.file('keystore.properties')
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+
+android {
+    namespace 'com.kinetica.keyboard'
+    compileSdk 34
+    // AGP 8.5.2 already defaults to these build-tools, so pinning changes
+    // nothing locally. It matters because F-Droid rebuilds the tagged release
+    // and compares it against the published APK: every input that could drift
+    // between two machines has to be fixed in the build script.
+    buildToolsVersion '34.0.0'
+
+    defaultConfig {
+        applicationId "com.kinetica.keyboard"
+        minSdk 26
+        targetSdk 34
+        versionCode 74
+        versionName "2.0.0"
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs += noticesDir
+        }
+    }
+
+    if (keystorePropsFile.exists()) {
+        signingConfigs {
+            release {
+                storeFile rootProject.file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
+        }
+    }
+
+    // AGP otherwise writes a Google-signed protobuf of the dependency tree into the
+    // APK signing block: a Play Store feature, opaque to anyone inspecting the APK,
+    // and rejected by F-Droid's scanner.
+    dependenciesInfo {
+        includeInApk false
+        includeInBundle false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (keystorePropsFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+        // A second application id, so the developer build installs beside the real
+        // app with its own data and cannot be mistaken for a published build. It is
+        // also the only build that writes a decode trace (TraceRecorder).
+        debug {
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-dev'
+            // Not debuggable, so the decode times a trace records are the phone's real cost:
+            // ART runs a debuggable build about twice as slow. The trace sink comes from the
+            // debug source set and needs no flag.
+            debuggable false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    testOptions {
+        unitTests {
+            // Engine goldens read file assets; radial UI tests need Android graphics shadows.
+            includeAndroidResources = true
+            all {
+                jvmArgs += [
+                    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                    "--add-opens=java.base/java.util=ALL-UNNAMED",
+                    "--add-opens=java.base/java.io=ALL-UNNAMED",
+                    "--add-opens=java.base/java.net=ALL-UNNAMED",
+                    "--add-opens=java.base/java.security=ALL-UNNAMED",
+                    "--add-opens=java.base/java.text=ALL-UNNAMED",
+                    "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+                    "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+                    "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+                ]
+            }
+        }
+    }
+}
+
+tasks.register('copyThirdPartyNotices', Copy) {
+    from rootProject.file('THIRD_PARTY_NOTICES')
+    into noticesDir
+    rename { 'third_party_notices.txt' }
+}
+preBuild.dependsOn copyThirdPartyNotices
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.room:room-runtime:2.6.1'
+    implementation 'androidx.room:room-ktx:2.6.1'
+    ksp 'androidx.room:room-compiler:2.6.1'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.12.2'
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Türkçe</item>
+    </string-array>
+
+    <string-array name="dual_circle_size_entries">
+        <item>Küçük</item>
+        <item>Normal</item>
+        <item>Büyük</item>
+    </string-array>
+
+    <string-array name="dual_circle_spread_entries">
+        <item>Dar</item>
+        <item>Normal</item>
+        <item>Geniş</item>
+    </string-array>
+
+    <string-array name="landscape_arrangement_entries">
+        <item>Kenarlara böl</item>
+        <item>Ortala</item>
+        <item>Tam genişlik</item>
+    </string-array>
+
+    <string-array name="layout_mode_entries">
+        <item>Tam genişlik</item>
+        <item>Sağa hizalı</item>
+        <item>Sola hizalı</item>
+        <item>Bölünmüş</item>
+        <item>Tek elle</item>
+    </string-array>
+
+    <string-array name="key_arrangement_entries">
+        <item>QWERTY</item>
+        <item>QWERTZ (Y ve Z yer değiştirir)</item>
+        <item>QZERTY (Z ve W yer değiştirir)</item>
+        <item>AZERTY (Fransız düzeni)</item>
+    </string-array>
+
+    <string-array name="trail_color_entries">
+        <item>Gökkuşağı</item>
+        <item>Kırmızı</item>
+        <item>Turuncu</item>
+        <item>Yeşil</item>
+        <item>Camgöbeği</item>
+        <item>Mor</item>
+        <item>Özel renk tonu</item>
+        <item>Tema rengi</item>
+    </string-array>
+
+    <string-array name="theme_mode_entries">
+        <item>Kinetica koyu (varsayılan)</item>
+        <item>Material You (Android 12+)</item>
+        <item>Özel renk</item>
+    </string-array>
+
+    <string-array name="theme_brightness_entries">
+        <item>Koyu</item>
+        <item>Açık</item>
+        <item>Sistemi takip et</item>
+    </string-array>
+</resources>

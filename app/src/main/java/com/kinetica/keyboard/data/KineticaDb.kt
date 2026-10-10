@@ -1,0 +1,116 @@
+package com.kinetica.keyboard.data
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+
+@Database(
+    entities = [
+        UserWord::class, ChordShortcut::class, BlockedWord::class, EmojiUse::class,
+        UserBigram::class, Expansion::class,
+    ],
+    version = 6,
+    exportSchema = false,
+)
+abstract class KineticaDb : RoomDatabase() {
+    abstract fun userWords(): UserWordDao
+    abstract fun chordShortcuts(): ChordShortcutDao
+    abstract fun blockedWords(): BlockedWordDao
+    abstract fun emojiUses(): EmojiUseDao
+    abstract fun userBigrams(): UserBigramDao
+    abstract fun expansions(): ExpansionDao
+
+    companion object {
+        @Volatile
+        private var instance: KineticaDb? = null
+
+        /**
+         * v1 -> v2: user_words gains a language partition. Pre-v2 rows carry no language,
+         * so they go to English, the default; an Italian-first user re-earns them in a few
+         * commits.
+         */
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE user_words_v2 (" +
+                        "word TEXT NOT NULL, lang TEXT NOT NULL, " +
+                        "frequency INTEGER NOT NULL, updatedAt INTEGER NOT NULL, " +
+                        "PRIMARY KEY(word, lang))",
+                )
+                db.execSQL(
+                    "INSERT INTO user_words_v2 (word, lang, frequency, updatedAt) " +
+                        "SELECT word, 'en', frequency, updatedAt FROM user_words",
+                )
+                db.execSQL("DROP TABLE user_words")
+                db.execSQL("ALTER TABLE user_words_v2 RENAME TO user_words")
+            }
+        }
+
+        /**
+         * v2 -> v3: the block list is a new table, not a column on user_words, so learned
+         * words and chords are never read, rewritten or dropped.
+         */
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS blocked_words (" +
+                        "word TEXT NOT NULL, lang TEXT NOT NULL, " +
+                        "addedAt INTEGER NOT NULL, " +
+                        "PRIMARY KEY(word, lang))",
+                )
+            }
+        }
+
+        /** v3 -> v4: emoji use counts, a new table like v2 -> v3. */
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS emoji_uses (" +
+                        "emoji TEXT NOT NULL, count INTEGER NOT NULL, " +
+                        "updatedAt INTEGER NOT NULL, " +
+                        "PRIMARY KEY(emoji))",
+                )
+            }
+        }
+
+        /** v4 -> v5: learned word pairs, a new table like v2 -> v3. */
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS user_bigrams (" +
+                        "prev TEXT NOT NULL, next TEXT NOT NULL, lang TEXT NOT NULL, " +
+                        "count INTEGER NOT NULL, updatedAt INTEGER NOT NULL, " +
+                        "PRIMARY KEY(prev, next, lang))",
+                )
+            }
+        }
+
+        /** v5 -> v6: text expansions, a new table like v2 -> v3. */
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    // triggerText, not trigger: TRIGGER is a SQL keyword and this SQL
+                    // is hand-written. See the Expansion entity.
+                    "CREATE TABLE IF NOT EXISTS expansions (" +
+                        "triggerText TEXT NOT NULL, position INTEGER NOT NULL, " +
+                        "target TEXT NOT NULL, " +
+                        "PRIMARY KEY(triggerText, position))",
+                )
+            }
+        }
+
+        fun get(context: Context): KineticaDb =
+            instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    KineticaDb::class.java,
+                    "user_dict.db",
+                ).addMigrations(
+                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
+                ).build().also { instance = it }
+            }
+    }
+}

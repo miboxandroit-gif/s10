@@ -1,0 +1,163 @@
+package com.kinetica.keyboard.engine
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import java.io.BufferedReader
+import java.io.StringReader
+
+/** Accented dictionaries: folded trie keys with per-node display variants. */
+class AccentFoldingTest {
+
+    private val g = TestData.qwertyGeometry()
+
+    private fun dict(vararg rows: Pair<String, Int>): LoadedDictionary {
+        val text = rows.joinToString("\n") { "${it.first}\t${it.second}" }
+        return DictionaryLoader.load(BufferedReader(StringReader(text)))
+    }
+
+    @Test
+    fun foldMapsAccentsAndSharpS() {
+        assertEquals("perche", AccentFolder.fold("perché"))
+        assertEquals("citta", AccentFolder.fold("città"))
+        assertEquals("zazolc gesla jazn", AccentFolder.fold("zażółć gęślą jaźń"))
+        assertEquals(
+            "prilis zlutoucky kun dabelske ody mesto",
+            AccentFolder.fold("příliš žluťoučký kůň ďábelské ódy město"),
+        )
+        assertEquals("strasse", AccentFolder.fold("straße"))
+        // French: ÿ folds like the other y-accents, œ is the second digraph.
+        assertEquals("soeur", AccentFolder.fold("sœur"))
+        assertEquals("moyen", AccentFolder.fold("moÿen"))
+        // Norwegian: æ and å onto "a", ø onto "o". They are letters of the alphabet, not
+        // accents, and each folds onto the key it is drawn on.
+        assertEquals("vare", AccentFolder.fold("være"))
+        assertEquals("for", AccentFolder.fold("før"))
+        assertEquals("mate", AccentFolder.fold("måte"))
+        assertEquals("stotte", AccentFolder.fold("støtte"))
+        val plain = "already plain"
+        assertTrue(plain === AccentFolder.fold(plain))
+    }
+
+    @Test
+    fun accentedWordDecodesFromBaseKeyTaps() {
+        val d = dict("perché" to 9000, "il" to 20000)
+        val p = WordPredictor(d.trie, BigramTable.EMPTY, g, d.forms)
+        val tokens = "perche".mapIndexed { i, c -> TestData.tap(c, g, i * 100L) }
+        val result = p.decode(tokens, emptyList())
+        assertEquals("perché", result[0].word)
+    }
+
+    @Test
+    fun collidingVariantsBothSurface() {
+        val d = dict("e" to 100000, "è" to 90000)
+        val p = WordPredictor(d.trie, BigramTable.EMPTY, g, d.forms)
+        val result = p.decode(listOf(TestData.tap('e', g, 0)), emptyList())
+        val words = result.map { it.word }
+        assertTrue("expected both variants in $words", words.containsAll(listOf("e", "è")))
+        // Higher raw count must win the ranking.
+        assertEquals("e", result[0].word)
+    }
+
+    @Test
+    fun isWordDistinguishesVariantsFromFoldedKeys() {
+        val d = dict("perché" to 9000, "e" to 100000, "è" to 90000, "casa" to 5000)
+        val p = WordPredictor(d.trie, BigramTable.EMPTY, g, d.forms)
+        assertTrue(p.isWord("perché"))
+        assertFalse("folded spelling is not a word", p.isWord("perche"))
+        assertTrue(p.isWord("e"))
+        assertTrue(p.isWord("è"))
+        assertTrue(p.isWord("casa"))
+    }
+
+    @Test
+    fun autocorrectRestoresAccent() {
+        val d = dict("perché" to 9000, "casa" to 5000)
+        val p = WordPredictor(d.trie, BigramTable.EMPTY, g, d.forms)
+        val tokens = "perche".mapIndexed { i, c -> TestData.tap(c, g, i * 100L) }
+        val candidates = p.decode(tokens, emptyList())
+        val target = p.autocorrectTarget("perche", candidates, 0.85f)
+        assertEquals("perché", target?.word)
+    }
+
+    @Test
+    fun accentedLetterCodeAcceptsOnlyRealAccents() {
+        // What KineticaIME composes into the word instead of committing it: an accent, in
+        // either case.
+        assertEquals('o' - 'a', AccentFolder.accentedLetterCode("ó"))
+        assertEquals('a' - 'a', AccentFolder.accentedLetterCode("à"))
+        assertEquals('n' - 'a', AccentFolder.accentedLetterCode("ñ"))
+        assertEquals('a' - 'a', AccentFolder.accentedLetterCode("Ą"))
+        assertEquals('e' - 'a', AccentFolder.accentedLetterCode("ę"))
+        assertEquals('c' - 'a', AccentFolder.accentedLetterCode("Ç"))
+        assertEquals('e' - 'a', AccentFolder.accentedLetterCode("É"))
+        assertEquals('r' - 'a', AccentFolder.accentedLetterCode("Ř"))
+        assertEquals('t' - 'a', AccentFolder.accentedLetterCode("ť"))
+        // The popup's own base cell is a letter but not an accented one: it keeps the
+        // commit-then-insert path.
+        assertEquals(-1, AccentFolder.accentedLetterCode("o"))
+        assertEquals(-1, AccentFolder.accentedLetterCode("O"))
+        // Everything else a popup, an edge swipe or the enter strip can insert.
+        for (t in listOf("", "1", "?", ",", ";", "€", "ß", "ss", "óó", "😀")) {
+            assertEquals("'$t' must not compose", -1, AccentFolder.accentedLetterCode(t))
+        }
+    }
+
+    @Test
+    fun turkishDictionaryKeepsNativeLettersAsSeparateKeys() {
+        val text = "cok\t100\nçok\t90\nmısır\t80\nmisir\t70"
+        val d = DictionaryLoader.load(
+            BufferedReader(StringReader(text)),
+            alphabet = Alphabet.TURKISH,
+        )
+        assertTrue(d.trie.nodeFor("cok") >= 0)
+        assertTrue(d.trie.nodeFor("çok") >= 0)
+        assertTrue(d.trie.nodeFor("mısır") >= 0)
+        assertTrue(d.trie.nodeFor("misir") >= 0)
+        assertTrue(d.trie.nodeFor("cok") != d.trie.nodeFor("çok"))
+        assertTrue(d.trie.nodeFor("mısır") != d.trie.nodeFor("misir"))
+    }
+
+    @Test
+    fun turkishBigramsUseTheSameNativeAlphabetAsTheTrie() {
+        val d = DictionaryLoader.load(
+            BufferedReader(StringReader("çok\t90\nşey\t80")),
+            alphabet = Alphabet.TURKISH,
+        )
+        val table = DictionaryLoader.loadBigrams(
+            BufferedReader(StringReader("çok\tşey\t25")),
+            d.trie,
+        )
+        assertTrue(table.successors(d.trie.nodeFor("çok"), 10).any { it.first == d.trie.nodeFor("şey") })
+    }
+
+    @Test
+    fun englishDictionaryHasNoForms() {
+        val d = dict("the" to 12000, "then" to 5000, "don't" to 2200)
+        assertTrue(d.forms.isEmpty())
+    }
+
+    @Test
+    fun foldAlsoFoldsCase() {
+        // The trie alphabet has no capitals: Alphabet.codeOf admits only a-z
+        // and an apostrophe, so a capitalized entry would encode to null and be
+        // dropped silently. Case folding here lets a wordlist carry a capitalized
+        // display form on a lowercase key.
+        assertEquals("haus", AccentFolder.fold("Haus"))
+        assertEquals("strasse", AccentFolder.fold("Straße"))
+        assertEquals("uber", AccentFolder.fold("Über"))
+        assertEquals("soeur", AccentFolder.fold("Sœur"))
+        // Norwegian's own letters, capitalized as they are at a sentence start.
+        assertEquals("ao", AccentFolder.fold("ÆØ"))
+        assertEquals("vare", AccentFolder.fold("Være"))
+    }
+
+    @Test
+    fun anAllLowercasePlainWordIsStillTheSameInstance() {
+        // The identity optimization the loader relies on, kept across the case
+        // change: every asset that was lowercase before still folds for free.
+        val plain = "already plain"
+        assertTrue(plain === AccentFolder.fold(plain))
+    }
+}

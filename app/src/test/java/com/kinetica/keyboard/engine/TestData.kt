@@ -1,0 +1,514 @@
+package com.kinetica.keyboard.engine
+
+import com.kinetica.keyboard.engine.models.Dwell
+import com.kinetica.keyboard.engine.models.KeyContact
+import com.kinetica.keyboard.engine.models.PathPoint
+import com.kinetica.keyboard.engine.models.StreamId
+import com.kinetica.keyboard.engine.models.SwipeToken
+import com.kinetica.keyboard.engine.models.TapToken
+import kotlin.math.PI
+import kotlin.math.sin
+import kotlin.math.sqrt
+import kotlin.random.Random
+
+/** Shared fixtures: synthetic keyboard geometries and hand-built tokens. */
+object TestData {
+    const val KEY_W = 100f
+
+    /**
+     * Standard QWERTY grid, 1000px wide, 150px row height (kw: keys 1.0 wide,
+     * rows 1.5 tall), the proportions of assets/layouts/qwerty.json.
+     */
+    fun qwertyGeometry(): KeyboardGeometry = qwertyGeometry(DEFAULT_ROW_PITCH_KW)
+
+    /**
+     * The same grid at an arbitrary row pitch, because `kw` is derived from key
+     * width alone: rows are 1.5 kw apart on this fixture, 1.94 on a Pixel 7 at 35%
+     * height, and near 0.5 on an unfolded foldable at the height floor, where two
+     * vertically adjacent keys are closer than two horizontally adjacent ones.
+     *
+     * From 1.94 down to 0.31 the pitch moves no word off the top; it compresses the
+     * margin to the nearest wrong word.
+     */
+    fun qwertyGeometry(rowPitchKw: Float): KeyboardGeometry = letterGeometry(
+        listOf(
+            "qwertyuiop" to 0.0f,
+            "asdfghjkl" to 0.5f,
+            "zxcvbnm" to 1.5f,
+        ),
+        rowPitchKw,
+    )
+
+    /**
+     * Turkish Q layout: 10 / 11 / 8 native-letter keys, with the narrower home row
+     * and bottom-row inset from assets/layouts/qwerty_tr.json. This is deliberately
+     * a controlled JVM fixture, not a model of device-specific key sizing.
+     */
+    fun turkishQwertyGeometry(): KeyboardGeometry {
+        val alphabet = Alphabet.TURKISH
+        val rows = listOf(
+            Triple("ertyuıopğü", 0f, 100f),
+            Triple("asdfghjklşi", 0f, 1000f / 11f),
+            Triple("zcvbnmöç", 100f, 100f),
+        )
+        val rects = ArrayList<FloatArray>()
+        val codes = ArrayList<Int>()
+        val rowHeight = 100f
+        for ((rowIndex, row) in rows.withIndex()) {
+            val (letters, leftInset, keyWidth) = row
+            for ((index, letter) in letters.withIndex()) {
+                val left = leftInset + index * keyWidth
+                val top = rowIndex * rowHeight
+                rects.add(floatArrayOf(left, top, left + keyWidth, top + rowHeight))
+                codes.add(alphabet.codeOf(letter))
+            }
+        }
+        require(codes.size == alphabet.letterCount) {
+            "Turkish fixture has ${codes.size} keys for ${alphabet.letterCount} native letters"
+        }
+        require(codes.all { it >= 0 } && codes.toSet().size == codes.size) {
+            "Turkish fixture must cover every native letter exactly once"
+        }
+        return KeyboardGeometry.fromPx(KEY_W, 500f, rects, codes.toIntArray(), alphabet)
+    }
+
+    /** The same grid with Y and Z exchanged, as in the QWERTZ setting. */
+    fun qwertzGeometry(): KeyboardGeometry = letterGeometry(
+        listOf(
+            "qwertzuiop" to 0.0f,
+            "asdfghjkl" to 0.5f,
+            "yxcvbnm" to 1.5f,
+        ),
+        DEFAULT_ROW_PITCH_KW,
+    )
+
+    /**
+     * AZERTY, which is not a letter swap: rows run 10/10/6 against QWERTY's
+     * 10/9/7, the home row starts flush left instead of half-indented, and M
+     * sits at its end. Mirrors assets/layouts/azerty_fr.json key for key, so a
+     * French golden decoded here is decoded on the board a French user sees.
+     */
+    fun azertyGeometry(): KeyboardGeometry = letterGeometry(
+        listOf(
+            "azertyuiop" to 0.0f,
+            "qsdfghjklm" to 0.0f,
+            "wxcvbn" to 2.0f,
+        ),
+        DEFAULT_ROW_PITCH_KW,
+    )
+
+    /**
+     * Russian ЙЦУКЕН, mirroring assets/layouts/native_ru.json: 12 / 11 / 9, each key a
+     * twelfth of the board. At one keyboard height the rows sit 1.2 times further apart in
+     * kw than on a ten-key board, since kw is the narrower key.
+     */
+    fun jcukenGeometry(): KeyboardGeometry = letterGeometry(
+        listOf(
+            "йцукенгшщзхъ" to 0.0f,
+            "фывапролджэ" to 0.5f,
+            "ячсмитьбю" to 1.5f,
+        ),
+        DEFAULT_ROW_PITCH_KW * 1.2f,
+        Alphabet.CYRILLIC,
+    )
+
+    /** Ukrainian, mirroring assets/layouts/native_uk.json: Russian's rows with ї, і and є. */
+    fun ukrainianGeometry(): KeyboardGeometry = letterGeometry(
+        listOf(
+            "йцукенгшщзхї" to 0.0f,
+            "фівапролджє" to 0.5f,
+            "ячсмитьбю" to 1.5f,
+        ),
+        DEFAULT_ROW_PITCH_KW * 1.2f,
+        Alphabet.UKRAINIAN,
+    )
+
+    /** Hebrew, mirroring assets/layouts/native_he.json: 8 / 10 / 9, ten-key widths. */
+    fun hebrewGeometry(): KeyboardGeometry = letterGeometry(
+        listOf(
+            "קראטוןםפ" to 0.0f,
+            "שדגכעיחלךף" to 0.0f,
+            "זסבהנמצתץ" to 0.5f,
+        ),
+        DEFAULT_ROW_PITCH_KW,
+        Alphabet.HEBREW,
+    )
+
+    /** Arabic, mirroring assets/layouts/native_ar.json: 12 / 11 / 10, twelfth widths. */
+    fun arabicGeometry(): KeyboardGeometry = letterGeometry(
+        listOf(
+            "ضصثقفغعهخحجد" to 0.0f,
+            "شسيبلاتنمكط" to 0.5f,
+            "ذئءؤرىةوزظ" to 0.0f,
+        ),
+        DEFAULT_ROW_PITCH_KW * 1.2f,
+        Alphabet.ARABIC,
+    )
+
+    private fun letterGeometry(
+        rows: List<Pair<String, Float>>,
+        rowPitchKw: Float,
+        alphabet: Alphabet = Alphabet.LATIN,
+    ): KeyboardGeometry {
+        val rowH = rowPitchKw * KEY_W
+        val rects = ArrayList<FloatArray>()
+        val codes = ArrayList<Int>()
+        for ((rowIdx, row) in rows.withIndex()) {
+            val (letters, offsetKeys) = row
+            val top = rowIdx * rowH
+            for ((i, ch) in letters.withIndex()) {
+                val left = (offsetKeys + i) * KEY_W
+                rects.add(floatArrayOf(left, top, left + KEY_W, top + rowH))
+                codes.add(alphabet.codeOf(ch))
+            }
+        }
+        return KeyboardGeometry.fromPx(KEY_W, 1000f, rects, codes.toIntArray(), alphabet)
+    }
+
+    const val DEFAULT_ROW_PITCH_KW = 1.5f
+
+    fun smallDictionary(): Trie = Trie.build(
+        listOf(
+            "the" to 12000, "then" to 5000, "them" to 4000, "they" to 4500,
+            "there" to 3000, "their" to 2800, "these" to 2500,
+            "something" to 1500, "sometimes" to 1400, "someone" to 1300,
+            "some" to 3500, "so" to 6000, "son" to 900,
+            "hello" to 2000, "help" to 1800, "hell" to 400,
+            "a" to 20000, "and" to 15000, "at" to 9000,
+            "smoothing" to 50, "soothing" to 60,
+            "don't" to 2200, "dont" to 5,
+            "tie" to 300, "toe" to 200,
+        ),
+    )
+
+    /** Tap at the exact key center. */
+    fun tap(c: Char, g: KeyboardGeometry, t0: Long, stream: StreamId = StreamId.LEFT): TapToken {
+        val code = g.alphabet.codeOf(c)
+        return TapToken(stream, code, g.centerX(code), g.centerY(code), false, t0, t0 + 60)
+    }
+
+    /**
+     * A clean swipe through the word's key centers: the ideal polyline,
+     * densified to ~10 samples per segment with linear timestamps.
+     */
+    fun swipe(
+        letters: String,
+        g: KeyboardGeometry,
+        t0: Long,
+        durMs: Long,
+        stream: StreamId = StreamId.RIGHT,
+    ): SwipeToken {
+        val centers = ArrayList<Pair<Float, Float>>()
+        var prev = -1
+        for (ch in letters) {
+            val code = g.alphabet.codeOf(ch)
+            if (code == prev) continue
+            centers.add(g.centerX(code) to g.centerY(code))
+            prev = code
+        }
+        require(centers.size >= 1)
+        val path = ArrayList<PathPoint>()
+        if (centers.size == 1) {
+            for (k in 0 until 8) {
+                path.add(PathPoint(centers[0].first, centers[0].second, t0 + k))
+            }
+        } else {
+            val perSeg = 10
+            val totalPts = (centers.size - 1) * perSeg + 1
+            var idx = 0
+            for (s in 0 until centers.size - 1) {
+                val (x0, y0) = centers[s]
+                val (x1, y1) = centers[s + 1]
+                for (k in 0 until perSeg) {
+                    val f = k / perSeg.toFloat()
+                    val t = t0 + durMs * idx / (totalPts - 1)
+                    path.add(PathPoint(x0 + f * (x1 - x0), y0 + f * (y1 - y0), t))
+                    idx++
+                }
+            }
+            path.add(PathPoint(centers.last().first, centers.last().second, t0 + durMs))
+        }
+        var arc = 0f
+        for (i in 1 until path.size) {
+            val dx = path[i].x - path[i - 1].x
+            val dy = path[i].y - path[i - 1].y
+            arc += sqrt(dx * dx + dy * dy)
+        }
+        val resampled = FloatArray(2 * KineticaConstants.RESAMPLE_N)
+        DtwMatcher().resample(path, resampled)
+        return SwipeToken(stream, path, resampled, contactsAlong(path, g), arc, t0, t0 + durMs)
+    }
+
+    /**
+     * A realistic imperfect swipe: at every interior vertex the finger
+     * overshoots the turn by [overshootKw] along the incoming direction before
+     * correcting toward the next key. Perfect center-to-center paths mask
+     * pruning bugs that only fire when local minima shift by a sample or two.
+     */
+    fun sloppySwipe(
+        letters: String,
+        g: KeyboardGeometry,
+        t0: Long,
+        durMs: Long,
+        overshootKw: Float = 0.4f,
+        stream: StreamId = StreamId.RIGHT,
+    ): SwipeToken {
+        val centers = ArrayList<Pair<Float, Float>>()
+        var prev = -1
+        for (ch in letters) {
+            val code = g.alphabet.codeOf(ch)
+            if (code == prev) continue
+            centers.add(g.centerX(code) to g.centerY(code))
+            prev = code
+        }
+        require(centers.size >= 2)
+        val vertices = ArrayList<Pair<Float, Float>>()
+        vertices.add(centers[0])
+        for (i in 1 until centers.size) {
+            val (px, py) = centers[i - 1]
+            val (cx, cy) = centers[i]
+            val len = sqrt((cx - px) * (cx - px) + (cy - py) * (cy - py))
+            vertices.add(cx to cy)
+            if (i < centers.size - 1 && len > 1e-3f) {
+                vertices.add(cx + (cx - px) / len * overshootKw to cy + (cy - py) / len * overshootKw)
+            }
+        }
+        val path = ArrayList<PathPoint>()
+        val perSeg = 10
+        val totalPts = (vertices.size - 1) * perSeg + 1
+        var idx = 0
+        for (s in 0 until vertices.size - 1) {
+            val (x0, y0) = vertices[s]
+            val (x1, y1) = vertices[s + 1]
+            for (k in 0 until perSeg) {
+                val f = k / perSeg.toFloat()
+                val t = t0 + durMs * idx / (totalPts - 1)
+                path.add(PathPoint(x0 + f * (x1 - x0), y0 + f * (y1 - y0), t))
+                idx++
+            }
+        }
+        path.add(PathPoint(vertices.last().first, vertices.last().second, t0 + durMs))
+        var arc = 0f
+        for (i in 1 until path.size) {
+            val dx = path[i].x - path[i - 1].x
+            val dy = path[i].y - path[i - 1].y
+            arc += sqrt(dx * dx + dy * dy)
+        }
+        val resampled = FloatArray(2 * KineticaConstants.RESAMPLE_N)
+        DtwMatcher().resample(path, resampled)
+        return SwipeToken(stream, path, resampled, contactsAlong(path, g), arc, t0, t0 + durMs)
+    }
+
+    /**
+     * A deterministic, perturbed swipe for repeatable decoder benchmarks.
+     *
+     * Starts from [sloppySwipe] so turns can overshoot, then applies seeded,
+     * smoothed two-axis drift to the sampled path. [jitterKw] is in key-width
+     * units. The same (word, seed, parameters) always creates the same trace.
+     */
+    fun jitteredSwipe(
+        letters: String,
+        g: KeyboardGeometry,
+        t0: Long,
+        durMs: Long,
+        overshootKw: Float = 0.45f,
+        jitterKw: Float = 0.12f,
+        seed: Int,
+        stream: StreamId = StreamId.RIGHT,
+    ): SwipeToken {
+        require(jitterKw >= 0f) { "jitterKw must be non-negative" }
+        val base = sloppySwipe(
+            letters = letters, g = g, t0 = t0, durMs = durMs,
+            overshootKw = overshootKw, stream = stream,
+        )
+        val source = base.rawPath
+        val random = Random(seed)
+        val noiseX = FloatArray(source.size) { random.nextFloat() * 2f - 1f }
+        val noiseY = FloatArray(source.size) { random.nextFloat() * 2f - 1f }
+
+        fun smooth(noise: FloatArray, index: Int): Float {
+            val first = (index - 2).coerceAtLeast(0)
+            val last = (index + 2).coerceAtMost(noise.lastIndex)
+            var total = 0f
+            for (i in first..last) total += noise[i]
+            return total / (last - first + 1)
+        }
+
+        val perturbed = source.mapIndexed { index, point ->
+            val fraction = if (source.size <= 1) 0f else index / (source.size - 1f)
+            // Keep some endpoint offset while increasing movement variation
+            // through the middle of the gesture.
+            val envelope = 0.35f + 0.65f * sin(PI * fraction).toFloat()
+            val dx = smooth(noiseX, index) * 2f * jitterKw * envelope
+            val dy = smooth(noiseY, index) * 2f * jitterKw * envelope
+            PathPoint(point.x + dx, point.y + dy, point.t)
+        }
+
+        var arc = 0f
+        for (i in 1 until perturbed.size) {
+            val dx = perturbed[i].x - perturbed[i - 1].x
+            val dy = perturbed[i].y - perturbed[i - 1].y
+            arc += sqrt(dx * dx + dy * dy)
+        }
+        val resampled = FloatArray(2 * KineticaConstants.RESAMPLE_N)
+        DtwMatcher().resample(perturbed, resampled)
+        return SwipeToken(
+            stream, perturbed, resampled, contactsAlong(perturbed, g), arc,
+            base.tStart, base.tEnd,
+        )
+    }
+
+    /**
+     * One continuous swipe with a mid-path rest: the finger travels through
+     * [before]'s key centers, rests on the last of them across a time gap
+     * (many stationary samples), then resumes from that rest position through
+     * [after]'s key centers. Models a thumb that pauses mid-word while the
+     * other thumb acts, the resume-after-interruption pattern the merge's
+     * split generators cover. [overshootKw] adds turn overshoot so the fixture
+     * is not a perfect-center path.
+     */
+    fun dwellSwipe(
+        before: String,
+        after: String,
+        g: KeyboardGeometry,
+        t0: Long,
+        travelMs: Long,
+        restMs: Long,
+        resumeMs: Long,
+        overshootKw: Float = 0f,
+        stream: StreamId = StreamId.LEFT,
+        /**
+         * Attach the [Dwell] marker GestureStream would produce for the rest
+         * span. Off by default so the other fixtures stay dwell-free controls:
+         * those goldens must keep proving the geometric split mechanisms
+         * without dwell help.
+         */
+        markDwell: Boolean = false,
+    ): SwipeToken {
+        val beforeCenters = uniqueCenters(before, g)
+        require(beforeCenters.isNotEmpty())
+        val restCenter = beforeCenters.last()
+        // The resumed leg starts at the rest position and visits the after-keys.
+        val resumeCenters = ArrayList<Pair<Float, Float>>()
+        resumeCenters.add(restCenter)
+        for (c in uniqueCenters(after, g)) if (c != resumeCenters.last()) resumeCenters.add(c)
+        require(resumeCenters.size >= 2) { "resume leg needs at least one new key" }
+
+        val path = ArrayList<PathPoint>()
+        appendPolyline(path, withOvershoot(beforeCenters, overshootKw), t0, t0 + travelMs)
+        val restStart = t0 + travelMs
+        val restEnd = restStart + restMs
+        // Stationary samples across the pause: the held pointer keeps receiving
+        // timestamped samples at the same coordinate while the other thumb moves.
+        val restFirstIdx = path.size
+        val restSamples = 12
+        for (k in 0..restSamples) {
+            val t = restStart + (restEnd - restStart) * k / restSamples
+            path.add(PathPoint(restCenter.first, restCenter.second, t))
+        }
+        val restLastIdx = path.size - 1
+        appendPolyline(path, withOvershoot(resumeCenters, overshootKw), restEnd, restEnd + resumeMs)
+
+        var arc = 0f
+        for (i in 1 until path.size) {
+            val dx = path[i].x - path[i - 1].x
+            val dy = path[i].y - path[i - 1].y
+            arc += sqrt(dx * dx + dy * dy)
+        }
+        val resampled = FloatArray(2 * KineticaConstants.RESAMPLE_N)
+        DtwMatcher().resample(path, resampled)
+        val dwells = if (markDwell) {
+            listOf(Dwell(restFirstIdx, restLastIdx, restStart, restEnd))
+        } else {
+            emptyList()
+        }
+        return SwipeToken(
+            stream, path, resampled, contactsAlong(path, g), arc, t0, restEnd + resumeMs,
+            dwells = dwells,
+        )
+    }
+
+    /**
+     * Key contacts along [path], the way a real gesture carries them.
+     *
+     * A device token gets these from GestureStream, which applies hysteresis. This is
+     * a simpler approximation (nearest key per sample, consecutive samples on the same
+     * key grouped into one contact), close enough for the merge, which uses a contact
+     * only for the moment it began.
+     */
+    fun contactsAlong(path: List<PathPoint>, g: KeyboardGeometry): List<KeyContact> {
+        val out = ArrayList<KeyContact>()
+        var code = -1
+        var enter = 0L
+        for (p in path) {
+            val k = g.nearestKey(p.x, p.y)
+            if (k != code) {
+                if (code >= 0) out.add(KeyContact(code, enter, p.t))
+                code = k
+                enter = p.t
+            }
+        }
+        if (code >= 0 && path.isNotEmpty()) out.add(KeyContact(code, enter, path.last().t))
+        return out
+    }
+
+    /** Key centers for a string, dropping consecutive duplicates. */
+    private fun uniqueCenters(letters: String, g: KeyboardGeometry): List<Pair<Float, Float>> {
+        val out = ArrayList<Pair<Float, Float>>()
+        var prev = -1
+        for (ch in letters) {
+            val code = g.alphabet.codeOf(ch)
+            if (code == prev) continue
+            out.add(g.centerX(code) to g.centerY(code))
+            prev = code
+        }
+        return out
+    }
+
+    /** Overshoot each interior vertex along its incoming direction (as sloppySwipe). */
+    private fun withOvershoot(
+        centers: List<Pair<Float, Float>>,
+        overshootKw: Float,
+    ): List<Pair<Float, Float>> {
+        if (overshootKw <= 0f || centers.size < 2) return centers
+        val out = ArrayList<Pair<Float, Float>>()
+        out.add(centers[0])
+        for (i in 1 until centers.size) {
+            val (px, py) = centers[i - 1]
+            val (cx, cy) = centers[i]
+            val len = sqrt((cx - px) * (cx - px) + (cy - py) * (cy - py))
+            out.add(cx to cy)
+            if (i < centers.size - 1 && len > 1e-3f) {
+                out.add(cx + (cx - px) / len * overshootKw to cy + (cy - py) / len * overshootKw)
+            }
+        }
+        return out
+    }
+
+    /** Interpolate ~10 samples per leg through [vertices], timestamps over [tStart,tEnd]. */
+    private fun appendPolyline(
+        path: ArrayList<PathPoint>,
+        vertices: List<Pair<Float, Float>>,
+        tStart: Long,
+        tEnd: Long,
+    ) {
+        if (vertices.size < 2) {
+            path.add(PathPoint(vertices[0].first, vertices[0].second, tStart))
+            return
+        }
+        val perSeg = 10
+        val totalPts = (vertices.size - 1) * perSeg + 1
+        var idx = 0
+        for (s in 0 until vertices.size - 1) {
+            val (x0, y0) = vertices[s]
+            val (x1, y1) = vertices[s + 1]
+            for (k in 0 until perSeg) {
+                val f = k / perSeg.toFloat()
+                val t = tStart + (tEnd - tStart) * idx / (totalPts - 1)
+                path.add(PathPoint(x0 + f * (x1 - x0), y0 + f * (y1 - y0), t))
+                idx++
+            }
+        }
+        path.add(PathPoint(vertices.last().first, vertices.last().second, tEnd))
+    }
+}

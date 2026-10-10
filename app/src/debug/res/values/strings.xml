@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!--
+      Overrides for the developer build. The system keyboard picker lists ime_name, so the
+      two builds need different names there.
+    -->
+    <string name="app_name">Kinetica DEV</string>
+    <string name="ime_name">Kinetica DEV Keyboard</string>
+    <string name="app_pkg" translatable="false">com.kinetica.keyboard.dev</string>
+
+    <string name="trace_title">Kinetica DEV trace</string>
+    <string name="trace_recording">Recording decode traces</string>
+    <string name="trace_explain">For swipe tuning, record about 100–200 ordinary sentences while using both thumbs naturally. Include short and long words, punctuation, and varied tablet grips (held, on a table, and in split-screen if relevant). Avoid passwords, private messages, and other sensitive text: the trace contains the words you type. Recording stays on this device until you explicitly export it. Share the exported file only if you are comfortable sharing its contents. The normal Kinetica build records nothing.</string>
+    <string name="trace_export">Export</string>
+    <string name="trace_clear">Clear</string>
+    <string name="trace_empty">Nothing recorded yet.</string>
+    <string name="trace_export_done">Trace exported</string>
+    <string name="trace_export_failed">Export failed</string>
+    <string name="trace_cleared">Trace cleared</string>
+
+    <plurals name="trace_stats">
+        <item quantity="one">%1$d line, %2$s</item>
+        <item quantity="other">%1$d lines, %2$s</item>
+    </plurals>
+</resources>

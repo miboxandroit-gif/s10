@@ -1,0 +1,94 @@
+package com.kinetica.keyboard.engine
+
+import kotlin.math.ln
+import kotlin.math.max
+
+/**
+ * Bigram context boosts keyed on trie word ids: sorted packed longs
+ * (prevId << 32 | nextId) with one quantized boost byte each. Boost bytes are
+ * normalized per previous word (an approximation of P(next|prev)), so the
+ * multiplier reorders near-ties without overriding clear gesture geometry.
+ */
+class BigramTable private constructor(
+    private val keys: LongArray,
+    private val boosts: ByteArray,
+) {
+    val size: Int get() = keys.size
+
+    fun multiplier(prevWordId: Int, nextWordId: Int): Float {
+        if (prevWordId < 0 || nextWordId < 0 || keys.isEmpty()) return 1f
+        val key = pack(prevWordId, nextWordId)
+        val i = java.util.Arrays.binarySearch(keys, key)
+        if (i < 0) return 1f
+        return 1f + KineticaConstants.BIGRAM_BOOST_MAX * (boosts[i].toInt() and 0xFF) / 255f
+    }
+
+    fun sizeBytes(): Int = keys.size * 8 + boosts.size
+
+    /**
+     * What follows [prevWordId] in the table, strongest first, as (next word id, boost byte).
+     * A previous word's pairs are contiguous in the sorted keys, so this is one search and a
+     * slice.
+     */
+    fun successors(prevWordId: Int, limit: Int): List<Pair<Int, Int>> {
+        if (prevWordId < 0 || keys.isEmpty() || limit <= 0) return emptyList()
+        var i = java.util.Arrays.binarySearch(keys, pack(prevWordId, 0))
+        if (i < 0) i = -i - 1
+        val out = ArrayList<Pair<Int, Int>>()
+        while (i < keys.size && (keys[i] ushr 32).toInt() == prevWordId) {
+            out.add((keys[i] and 0xFFFFFFFFL).toInt() to (boosts[i].toInt() and 0xFF))
+            i++
+        }
+        out.sortWith(compareByDescending<Pair<Int, Int>> { it.second }.thenBy { it.first })
+        return if (out.size > limit) out.subList(0, limit) else out
+    }
+
+    companion object {
+        val EMPTY = BigramTable(LongArray(0), ByteArray(0))
+
+        private fun pack(prev: Int, next: Int): Long =
+            (prev.toLong() shl 32) or (next.toLong() and 0xFFFFFFFFL)
+
+        /** Entries are (prevWordId, nextWordId, rawCount); equal pairs sum their counts. */
+        fun build(entries: List<Triple<Int, Int, Long>>): BigramTable {
+            if (entries.isEmpty()) return EMPTY
+            val keys = LongArray(entries.size)
+            val counts = LongArray(entries.size)
+            val idx = entries.indices.sortedBy { pack(entries[it].first, entries[it].second) }
+            var uniqueCount = 0
+            for (i in idx) {
+                val e = entries[i]
+                val key = pack(e.first, e.second)
+                // Accent folding can make distinct spellings share a pair. Combine
+                // their evidence before finding the context maximum or quantizing.
+                if (uniqueCount > 0 && keys[uniqueCount - 1] == key) {
+                    counts[uniqueCount - 1] += e.third
+                } else {
+                    keys[uniqueCount] = key
+                    counts[uniqueCount] = e.third
+                    uniqueCount++
+                }
+            }
+            // Same-prev entries are contiguous after sorting; normalize each group
+            // against its own maximum so every context uses the full byte range.
+            val boosts = ByteArray(uniqueCount)
+            var start = 0
+            while (start < uniqueCount) {
+                val prev = keys[start] ushr 32
+                var end = start
+                var maxCount = 1L
+                while (end < uniqueCount && (keys[end] ushr 32) == prev) {
+                    maxCount = max(maxCount, counts[end])
+                    end++
+                }
+                val logMax = ln(1.0 + maxCount)
+                for (i in start until end) {
+                    val b = (255.0 * ln(1.0 + counts[i]) / logMax).toInt().coerceIn(1, 255)
+                    boosts[i] = b.toByte()
+                }
+                start = end
+            }
+            return BigramTable(keys.copyOf(uniqueCount), boosts)
+        }
+    }
+}

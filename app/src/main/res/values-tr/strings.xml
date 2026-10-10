@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtype_tr_tr">Türkçe</string>
+
+    <string name="onboarding_title">Kinetica’yı kur</string>
+    <string name="onboarding_step1">1. Sistem klavye listesinde Kinetica’yı etkinleştir</string>
+    <string name="onboarding_step2">2. Kinetica’yı geçerli klavye olarak seç</string>
+    <string name="onboarding_step3">3. Denemeye başla</string>
+    <string name="onboarding_enable">Etkinleştir</string>
+    <string name="onboarding_select">Seç</string>
+    <string name="onboarding_test_hint">Buraya yaz veya kaydır</string>
+    <string name="onboarding_open_settings">Klavye ayarları</string>
+    <string name="onboarding_dual_circle_settings">Daire klavye ayarları</string>
+    <string name="onboarding_step_done">%1$s  (tamamlandı)</string>
+    <string name="dict_source_open_source_tr">Helium314 AOSP Türkçe sözlüğü (Apache-2.0)</string>
+    <string name="dict_download_open_source_tr">Açık kaynak Türkçe sözlüğünü indir</string>
+    <string name="dict_download_open_source_tr_note">Helium314/aosp-dictionaries projesindeki Türkçe kelime listesini HTTPS ile indirir ve bu cihazdaki yerleşik sözlükle birleştirir. Kaynak lisansı: Apache-2.0.</string>
+    <string name="dict_download_failed">Sözlük indirilemedi. İnternet bağlantınızı kontrol edip yeniden deneyin.</string>
+    <string name="action_copy_all">Tümünü kopyala</string>
+    <string name="notice_copy_all">Tümünü kopyala</string>
+
+    <string name="pref_height_title">Klavye yüksekliği (ekranın yüzdesi)</string>
+    <string name="pref_height_landscape_title">Yatay klavye yüksekliği (ekranın yüzdesi)</string>
+    <string name="pref_landscape_arrangement_title">Yatay yerleşim</string>
+    <string name="pref_landscape_split_gap_title">Bölünmüş bölümler arasındaki boşluk (genişliğin yüzdesi)</string>
+    <string name="pref_landscape_split_gap_summary">Daha küçük değer daha geniş tuşlar verir. Yalnızca bölünmüş yerleşimde</string>
+    <string name="pref_suggestion_bar_title">Öneri çubuğu yüksekliği (dp)</string>
+    <string name="pref_suggestion_bar_summary">Kelimeler ve rozetler çubuğa göre ölçeklenir; daha ince çubuk daha küçük yazı demektir</string>
+
+    <string name="dual_circle_space_label">Boşluk</string>
+    <string name="dual_circle_delete_label">Sil</string>
+    <string name="dual_circle_space_label_tr">Boşluk</string>
+    <string name="dual_circle_delete_label_tr">Sil</string>
+
+    <string name="pref_key_arrangement_title">Harf düzeni</string>
+    <string name="pref_key_arrangement_summary">Hangi harfin hangi tuşta olduğunu belirler; aksanlar, rakamlar ve semboller yerinde kalır</string>
+    <string name="pref_layout_mode_title">Yerleşim modu</string>
+    <string name="pref_dual_circle_mode_title">Klavye şekli: Dual Circle</string>
+    <string name="pref_dual_circle_mode_summary">İsteğe bağlı iki başparmaklı dairesel klavyeyi kullan. Kapatırsan standart Kinetica’ya dönülür.</string>
+    <string name="pref_dual_circle_layout_title">Türkçe Dual Circle düzeni</string>
+    <string name="pref_dual_circle_layout_summary">Türkçe etkin olduğunda dairelerde Türkçe Optimize veya Türkçe QWERTY düzenini seçer. Standart klavyenin harf düzenini değiştirmez.</string>
+    <string name="dual_circle_layout_optimized">Türkçe Optimize</string>
+    <string name="dual_circle_layout_qwerty">Türkçe QWERTY</string>
+    <string name="pref_dual_circle_size_title">Dual Circle boyutu</string>
+    <string name="pref_dual_circle_spread_title">Başparmak açıklığı</string>
+    <string name="pref_dual_circle_help_title">Dual Circle nasıl kullanılır</string>
+    <string name="pref_dual_circle_help_summary">İki başparmakla dairesel yazım. Merkeze dokunmak Boşluk/Sil işlevidir; merkezde sola/sağa kaydırma imleç veya silme işlemini yapar. 12/3/6/9 işaretleri kas hafızasına yardım eder. 123 sayı ve sembol katmanını açar.</string>
+    <string name="pref_dual_circle_help_message">İki başparmağı birlikte kullan. Sol merkez Boşluk’tur; sola/sağa kaydırmak imleci hareket ettirir. Sağ merkez Sil’dir; sola/sağa kaydırmak silmeyi hazırlar. Dört küçük işaret sabit hafıza noktalarıdır. 123’e dokunarak aynı dairelerde sayı ve sembollere geç. Daire boyutu ve başparmak açıklığı bu yardım satırının üstündeki ayarlardan değiştirilebilir.</string>
+
+    <string name="pref_auto_capitalize_title">Cümleleri büyük harfle başlat</string>
+    <string name="pref_auto_capitalize_summary">Noktadan sonra büyük harf kullan. Kapalıysa klavye otomatik büyük harf yapmaz.</string>
+    <string name="pref_trail_color_title">Kaydırma izi rengi</string>
+
+    <string name="pref_language_title">Ana dil</string>
+    <string name="pref_enabled_languages_title">Etkin diller</string>
+    <string name="pref_enabled_languages_summary">Dil değiştiricinin arasında dolaşacağı diller: English ve Türkçe</string>
+    <string name="pref_sync_system_language_title">Sistem klavye dilini takip et</string>
+    <string name="pref_sync_system_language_summary">Klavye her açıldığında dili Android’in sistem klavye seçicisinden alır. Kapalıysa burada seçtiğin dil korunur.</string>
+    <string name="pref_auto_detect_title">Etkin dilleri önerilerde karıştır</string>
+    <string name="pref_auto_detect_summary">Öneriler etkin dillerden oluşturulur; sözcükler kendi dillerinde öğrenilir.</string>
+    <string name="pref_autocorrect_title">Otomatik düzeltme</string>
+
+    <string name="pref_group_look_title">Görünüm</string>
+    <string name="pref_group_look_summary">Tema, renkler, kaydırma izi ve titreşim</string>
+    <string name="pref_group_size_title">Boyut ve yerleşim</string>
+    <string name="pref_group_size_summary">Yükseklikler, kenar boşlukları, bölünmüş ve yatay yerleşim, harf düzeni</string>
+    <string name="pref_group_languages_title">Diller</string>
+    <string name="pref_group_languages_summary">Diller, ana dil ve yazım seçenekleri</string>
+    <string name="pref_group_languages_more_title">Diğer dil seçenekleri</string>
+    <string name="pref_group_languages_more_summary">Dilleri karıştırma ve yazdığın dili takip etme</string>
+
+    <string name="pref_theme_mode_title">Klavye teması</string>
+    <string name="pref_theme_brightness_title">Açık veya koyu</string>
+    <string name="pref_theme_hue_title">Vurgu tonu</string>
+    <string name="pref_theme_hue_summary">Özel renk temasının renk çemberindeki 0-360 konumu. Tüm yüzeyler bu tonu izler.</string>
+    <string name="pref_theme_color_title">Özel tema rengi</string>
+    <string name="pref_theme_color_summary">Özel paletin temel aldığı renk</string>
+
+    <!-- Tam Türkçe arayüz: genel ayarlar ve yardım -->
+    <string name="ime_name">Kinetica Klavyesi</string>
+    <string name="settings_search">Ayarlarda ara</string>
+    <string name="settings_search_hint">Ayar ara</string>
+    <string name="settings_search_none">Bu aramayla eşleşen ayar yok</string>
+    <string name="settings_title">Kinetica Ayarları</string>
+    <string name="licenses_title">Açık kaynak lisansları</string>
+    <string name="pref_version_title">Sürüm</string>
+    <string name="pref_licenses_summary">Veri kaynakları ve lisansları (GPL-3.0 uygulama; MIT ve CC BY 2.0 FR verileri)</string>
+    <string name="licenses_missing">Bu derlemede lisans bildirimleri eksik.</string>
+    <string name="learn_group_start">Buradan başlayın</string>
+    <string name="tip_two_thumbs_title">Bir kelimeyi iki başparmakla yazın</string>
+    <string name="tip_two_thumbs_summary">Her başparmak kendi tarafındaki harflerde kaydırma yapabilir veya harflere dokunabilir. İki başparmak birlikte ya da sırayla kullanılabilir.</string>
+    <string name="tip_correct_title">Az önce yazdığınız kelimeyi düzeltin</string>
+    <string name="tip_correct_summary">Kelimenin hemen ardından çubuktaki başka bir öneriye dokunun; kelime onunla değiştirilir.</string>
+    <string name="tip_more_words_title">Öneri çubuğunu yana kaydırın</string>
+    <string name="tip_more_words_summary">Sonraki sayfada daha fazla öneri bulunur; noktalar sayfa sayısını gösterir.</string>
+    <string name="tip_cursor_title">İmleci taşımak için boşluk çubuğunu kaydırın</string>
+    <string name="tip_cursor_summary">Sola veya sağa kaydırarak harf harf ilerleyin; ayar açıksa kelime kelime de hareket edebilirsiniz.</string>
+    <string name="tip_accents_title">Alternatif karakterler için harfe basılı tutun</string>
+    <string name="tip_accents_summary">İstediğiniz karaktere kaydırıp parmağınızı kaldırın. Açılır menünün şeklini uzun basma ayarlarından değiştirebilirsiniz.</string>
+    <string name="tip_delete_words_title">Silme tuşundan sola kaydırın</string>
+    <string name="tip_delete_words_summary">Kaydırdıkça silinecek kelimeler işaretlenir. Geri kaydırırsanız korunur; parmağınızı kaldırınca silinir.</string>
+    <string name="tip_case_title">Harf biçimini değiştirmek için Shift tuşuna basılı tutun</string>
+    <string name="tip_case_summary">İmlecin yanındaki kelimeyi veya seçili metni abc, Abc ya da ABC biçimine dönüştürün.</string>
+    <string name="tip_digits_title">Rakamlar için üst sırada yukarı kaydırın</string>
+    <string name="tip_digits_summary">Tuşun köşesindeki küçük karaktere tek kaydırmayla ulaşın: üst sırada yukarı, alt sırada aşağı kaydırın.</string>
+    <string name="tip_settings_key_title">Ayarlar için \?123 tuşuna basılı tutun</string>
+    <string name="tip_settings_key_summary">Dişli simgesine kaydırarak yazdığınız alandan ayrılmadan ayarları açın.</string>
+    <string name="tip_resize_title">Boyutu değiştirmek için tutamacı sürükleyin</string>
+    <string name="tip_resize_summary">Öneri çubuğunun üstündeki şerit klavye yüksekliğini ayarlar. Diğer seçenekler Boyut ve yerleşim bölümündedir.</string>
+    <string name="learn_group_faster">Daha hızlı yazın</string>
+    <string name="tip_next_word_title">Yazmadan önce sıradaki kelimeyi seçin</string>
+    <string name="tip_next_word_summary">Bir kelimeden sonra çubukta genellikle onu izleyen kelimeler önerilir.</string>
+    <string name="tip_recent_title">Son kelimeleri çubukta tutun</string>
+    <string name="tip_recent_summary">Son kelimeler varsayılan olarak kapalıdır. Önceki seçenekleri de göstererek yanlış kelimeyi tek dokunuşla düzeltmenizi sağlar.</string>
+    <string name="tip_retype_title">Bir kelimeyi tek dokunuşla yeniden kaydırın</string>
+    <string name="tip_retype_summary">Varsayılan olarak kapalı olan yeniden yazma düğmesi kelimeyi geri alır ve aynı hareket için diğer olasılıkları gösterir.</string>
+    <string name="tip_flick_title">Bir öneriyi yukarı doğru hızlıca kaydırın</string>
+    <string name="tip_flick_summary">Kelime hemen metne eklenir.</string>
+    <string name="tip_autospace_title">Boşluğu otomatik ekletin</string>
+    <string name="tip_autospace_summary">Kaydırarak yazılan kelimeden sonra boşluk eklenir. Gecikmeyi Boşluk ayarlarından değiştirebilir veya özelliği kapatabilirsiniz.</string>
+    <string name="tip_double_space_title">Nokta koymak için boşluk çubuğuna iki kez dokunun</string>
+    <string name="tip_double_space_summary">Varsayılan olarak kapalıdır.</string>
+    <string name="tip_enter_title">Enter tuşu arama yapar veya gönderir</string>
+    <string name="tip_enter_summary">Uygulamanın istediği işlem yapılır ve tuş bunu belirtir. Yeni satır için Enter tuşuna basılı tutun.</string>
+    <string name="tip_languages_title">Birden fazla dilde yazın</string>
+    <string name="tip_languages_summary">Dilleri Diller bölümünden etkinleştirin; \?123 ve l tuşlarıyla aralarında geçiş yapın.</string>
+    <string name="tip_follow_language_title">Klavye yazdığınız dili takip etsin</string>
+    <string name="tip_follow_language_summary">Deneysel özellik: en fazla üç dili birlikte değerlendirir ve yazdığınız dilin ağırlığını artırır.</string>
+    <string name="tip_peck_title">Dokunduğunuz harfi aynen yazın</string>
+    <string name="tip_peck_summary">\?123 menüsünden veya p ile açılan tek tek yazma modunda kaydırma, öneri ve otomatik düzeltme kullanılmaz.</string>
+    <string name="learn_group_yours">Kendinize göre düzenleyin</string>
+    <string name="tip_rank_title">Bir önerinin önceliğini artırın veya azaltın</string>
+    <string name="tip_rank_summary">Çubuktaki kelimeye basılı tutup yukarı veya aşağı kaydırın. En alt sıranın ötesine kaydırırsanız kelime engellenir.</string>
+    <string name="tip_chords_title">\?123 veya boşluk tuşuna basılı tutup bir tuşa dokunun</string>
+    <string name="tip_chords_summary">Tuş birleşimi metin yazabilir, işlem çalıştırabilir veya Ctrl ile bir tuşa basabilir.</string>
+    <string name="tip_edge_swipes_title">Tuşun kenarından dışarı kaydırın</string>
+    <string name="tip_edge_swipes_summary">Herhangi bir tuşun kenarından kaydırarak metin yazabilir, işlem çalıştırabilir veya Ctrl ile tuşa basabilirsiniz.</string>
+    <string name="tip_expansions_title">Kısa bir ifadeyi uzun metne dönüştürün</string>
+    <string name="tip_expansions_summary">Metin genişletmelerine bir kısayol ekleyin; çalıştırmak için kenar kaydırmasına, tuş birleşimine veya çubuğa Genişlet işlemini atayın.</string>
+    <string name="tip_shortcut_row_title">Çubuk boşken kısayolları gösterin</string>
+    <string name="tip_shortcut_row_summary">Çubukta görünecek kısayolları seçin. \?123 menüsünün ayrı kısayolları vardır.</string>
+    <string name="tip_midword_title">Kelimeyi değiştirmek için içine dokunun</string>
+    <string name="tip_midword_summary">Çubuk kelimenin tamamı için alternatifler sunar. Birini seçince kelimenin tamamı değiştirilir.</string>
+    <string name="tip_backup_title">Her şeyi tek dosyada yedekleyin</string>
+    <string name="tip_backup_summary">Yedekleme ayarları, öğrenilen kelimeleri, tuş birleşimlerini ve kaydırmaları kaydeder; başka telefona aktarabilirsiniz.</string>
+    <string name="tip_learned_title">Kinetica’nın öğrendiklerini görün</string>
+    <string name="tip_learned_summary">Sözlük bölümünde her dil için öğrenilen ve engellenen kelimeleri yönetin.</string>
+    <string name="tip_bigger_dictionary_title">Daha kapsamlı sözlük</string>
+    <string name="tip_bigger_dictionary_summary">AOSP kelime listesini içe aktarın; liste telefonda yerleşik sözlükle birleştirilir.</string>
+    <string name="tip_search_title">Ayarlarda arama yapın</string>
+    <string name="tip_search_summary">Arama simgesi, kullandığınız kelimeyle ilgili ayarı bulur.</string>
+    <string name="tip_layouts_title">Bölünmüş veya tek elle kullanım</string>
+    <string name="tip_layouts_summary">Yerleşim modunda tam genişlik, sağ, sol, bölünmüş veya tek elle düzeni seçin; yatay ekran için ayrı tuşlar vardır.</string>
+    <string name="pref_group_spacing_title">Boşluklar</string>
+    <string name="pref_group_spacing_summary">Otomatik boşluğun ne zaman ekleneceğini ve geri alınacağını ayarlar.</string>
+    <string name="pref_group_typing_title">Yazma</string>
+    <string name="pref_group_typing_summary">Otomatik düzeltme, büyük harfler, boşluklar, öneri çubuğu ve klavyenin öğrendikleri.</string>
+    <string name="pref_group_gestures_title">Kısayollar ve hareketler</string>
+    <string name="pref_group_gestures_summary">Tuş birleşimleri, kenar kaydırmaları, metin genişletme ve kaydırma hareketleri.</string>
+    <string name="pref_group_key_symbols_title">Tuş simgeleri</string>
+    <string name="pref_group_gestures_more_title">Diğer hareket ayarları</string>
+    <string name="pref_group_gestures_more_summary">Kaydırma ve dokunma davranışlarını özelleştirin.</string>
+    <string name="pref_group_learn_title">Öğrenme</string>
+    <string name="pref_group_learn_summary">Kişisel sözlük ve öğrenilen ifadeler</string>
+    <string name="pref_group_bar_title">Öneri çubuğu</string>
+    <string name="pref_group_bar_summary">Öneriler, kısayollar ve çubuk davranışı</string>
+    <string name="pref_group_keys_title">Tuşlar</string>
+    <string name="pref_group_keys_summary">Tuş boyutları ve davranışları</string>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <string name="pref_drag_handle_title">Boyutlandırma tutamacının yüksekliği</string>
+    <string name="pref_drag_handle_summary">Öneri çubuğunun üstündeki tutamaç (dp). 0 değeri tutamacı gizler; üstteki yükseklik ayarı klavyeyi boyutlandırmaya devam eder.</string>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <string name="pref_autospace_title">Kaydırmadan sonra otomatik boşluk</string>
+    <string name="pref_word_ends_on_space_title">Kelime yalnızca boşluk yazılınca bitsin</string>
+    <string name="pref_word_ends_on_space_summary">Zamanlayıcı kullanılmaz: boşluk, noktalama veya Enter gelene kadar dokunmalar ve kaydırmalar aynı kelimeye eklenir. Uzun kelimeleri parça parça yazmak için.</string>
+    <string name="pref_autospace_tapped_words_title">Dokunarak yazılan kelimelerden sonra da boşluk ekle</string>
+    <string name="pref_autospace_tapped_words_summary">Harfleri bir kelime oluşturuyorsa durakladığınızda boşluk eklenir. Yeni harf eklenirse boşluk geri alınır.</string>
+    <string name="pref_autospace_delay_title">Kaydırmadan sonra boşluk gecikmesi (ms)</string>
+    <string name="pref_autospace_delay_summary">Kaydırılan kelimeden sonra boşluğun ne kadar bekleneceği. Hâlâ yazdığınız kelimenin ortasına boşluk ekleniyorsa artırın.</string>
+    <string name="pref_autospace_tap_delay_title">Dokunmadan sonra boşluk gecikmesi (ms)</string>
+    <string name="pref_autospace_tap_delay_summary">Dokunarak yazılan kelimeler için gecikme. Dokunmalar daha düzenli olduğundan bu değer daha kısa olabilir.</string>
+    <string name="pref_autospace_retract_title">Boşluğu geri almak için süre (ms)</string>
+    <string name="pref_autospace_retract_summary">Otomatik boşluktan sonra gelen harfin boşluğu iptal edip kelimeye katılabileceği süre.</string>
+    <string name="pref_zen_title">Sade mod (animasyon yok)</string>
+    <string name="pref_zen_summary">Pil tasarrufu için kaydırma izlerini ve efektleri kapatır.</string>
+    <string name="pref_vibration_title">Tuşa basıldığında titreşim</string>
+    <string name="pref_vibration_intensity_title">Titreşim şiddeti</string>
+    <string name="pref_side_pad_title">Yan kenar boşluğu</string>
+    <string name="pref_side_pad_summary">Tuşların sağında ve solunda kalan boşluk. Tuşlar alana sığacak şekilde ölçeklenir; kaydırma etkilenmez.</string>
+    <string name="pref_bottom_pad_title">Alt kenar boşluğu</string>
+    <string name="pref_bottom_pad_summary">Tuşları küçültmeden klavyeyi ekranın alt kenarından yukarı taşır.</string>
+    <string name="pref_british_spelling_title">İngiliz İngilizcesi yazımı</string>
+    <string name="pref_british_spelling_summary">İngiliz İngilizcesi yazımlarını Amerikan yazımlarının üzerinde sıralar. Yalnızca İngilizce için.</string>
+    <string name="pref_peck_mode_title">Tek tek yazma modu</string>
+    <string name="pref_peck_mode_summary">Kaydırma, öneri ve otomatik düzeltme yoktur; her dokunuş seçilen harfi yazar. Argo ve sık değişen kelimeler için kullanışlıdır.</string>
+    
+    
+    
+    
+    <string name="pref_long_press_title">Uzun basma süresi (ms)</string>
+    <string name="pref_long_press_summary">Yaklaşık 150 ms altındaki değerlerde hızlı dokunuş harf yazmak yerine uzun basma menüsünü açabilir.</string>
+    
+    <string name="pref_reinforce_title">Öneri önceliğini artırma</string>
+    <string name="pref_reinforce_summary">Bir öneriye basılı tutarken eklenen ağırlık.</string>
+    <string name="pref_badges_while_adjusting_title">Sıraları yalnızca ayarlarken göster</string>
+    <string name="pref_badges_while_adjusting_summary">Kelimenin sıra rozeti, kelimeye basılı tutup kaydırırken görünür. Kapalıysa tüm sıralar sürekli gösterilir.</string>
+    <string name="pref_reinforce_step_title">Öneriyi kaydırma mesafesi (dp)</string>
+    <string name="pref_reinforce_step_summary">Basılı tutulan önerinin her adımda ne kadar kaydırılacağı. Her adım kelimenin ağırlığını iki katına çıkarır veya yarıya indirir; en alt sıranın ötesi kelimeyi engeller.</string>
+    <string name="pref_retype_avoids_title">Yeniden yazma farklı kelime önerir</string>
+    <string name="pref_retype_avoids_summary">Yeniden yazma düğmesinden sonra reddedilen kelime çubuğun sonuna gider, ancak seçilebilir durumda kalır.</string>
+    
+    
+    <string name="pref_home_row_spread_title">Orta sıra genişliği (%)</string>
+    <string name="pref_home_row_spread_summary">A S D F G H J K L tuşlarını kenarlara doğru genişletir. 0, normal yarım tuş girintisini korur.</string>
+    
+    
+    
+    
+    
+    
+    
+    
+    <string name="dict_settings_title">Sözlük</string>
+    <string name="pref_dictionary_summary">Her dilin temel ve kişisel sözlükleri: bilgi, içe aktarma, dışa aktarma ve sıfırlama.</string>
+    <string name="dict_lang_header_active">%1$s (etkin)</string>
+    <string name="dict_base_line">Temel: %1$s • %2$d kelime • %3$s</string>
+    <string name="dict_updated_bundled">uygulamayla birlikte gelir</string>
+    <string name="dict_personal_line">Kişisel sözlük: öğrenilmiş %1$d kelime</string>
+    <string name="dict_source_bundled">uygulamaya dahil (OpenSubtitles/Tatoeba)</string>
+    <string name="dict_source_aosp">içe aktarılmış AOSP sözlük birleştirmesi</string>
+    <string name="dict_import_base">Geliştirilmiş sözlüğü içe aktar (wordlist.combined)…</string>
+    <string name="dict_remove_base">İçe aktarılan sözlüğü kaldır (yerleşik sözlüğe dön)</string>
+    <string name="dict_remove_base_confirm">%1$s dili için içe aktarılan sözlük kaldırılsın ve yerleşik kelime listesine dönülsün mü?</string>
+    <string name="dict_manage_blocked">Engellenen kelimeler (%1$d)…</string>
+    <string name="dict_blocked_title">Engellenen kelimeler: %1$s</string>
+    <string name="dict_blocked_add_hint">Engellenecek kelime</string>
+    <string name="dict_blocked_add">Engelle</string>
+    <string name="dict_blocked_empty">Engellenmiş kelime yok. Engellenen kelime sözlükten çıkarılır ve önerilmez. Bir öneriyi aşağı kaydırmak yalnızca önceliğini azaltır.</string>
+    <string name="dict_export_personal">Kişisel sözlüğü dışa aktar…</string>
+    <string name="dict_import_personal">Kişisel sözlüğü içe aktar…</string>
+    <string name="dict_manage_personal">Öğrenilen kelimeleri gözden geçir (%1$d)…</string>
+    <string name="dict_manage_personal_title">Öğrenilen kelimeler: %1$s</string>
+    <string name="dict_word_row_taken_back">%1$s · geri alındı, önerilmiyor</string>
+    <string name="dict_words_help">Sayı, kelimeyi kaç kez yazdığınızı gösterir. Çubukta yukarı kaydırmak ağırlığını artırır. %1$d seviyesinden itibaren önerilir; altındaysa saklanır ama önerilmez. Silmek veya önceliğini artırmak için kelimeleri işaretleyin.</string>
+    <string name="dict_word_raise_checked">İşaretlilerin önceliğini artır</string>
+    <string name="dict_word_search_hint">Öğrenilen kelimelerde ara</string>
+    <string name="dict_word_search_empty">Bu aramayla eşleşen öğrenilmiş kelime yok.</string>
+    <string name="dict_word_delete_checked">İşaretlileri sil</string>
+    <string name="dict_reset_personal">Kişisel sözlüğü sıfırla</string>
+    <string name="dict_reset_confirm">%1$s dili için öğrenilmiş tüm kelimeler ve kişisel ağırlıklar silinsin mi? Bu işlem geri alınamaz.</string>
+    <string name="dict_import_done">Sözlük birleştirildi: %1$d yeni kelime eklendi</string>
+    <string name="dict_import_not_wordlist">AOSP wordlist.combined dosyası değil (kelime kaydı bulunamadı)</string>
+    <string name="dict_import_not_personal">Kinetica kişisel sözlük dışa aktarma dosyası değil</string>
+    <string name="dict_import_failed">İçe aktarma başarısız: dosya okunamadı</string>
+    <string name="dict_export_done">%1$d kişisel kelime dışa aktarıldı</string>
+    <string name="dict_export_failed">Dışa aktarma başarısız: dosya yazılamadı</string>
+    <string name="dict_db_error">Kişisel sözlük veritabanı kullanılamıyor</string>
+    <string name="dict_personal_import_done">%1$d kişisel kelime içe aktarıldı</string>
+    <string name="dict_personal_import_mode_title">Kişisel sözlüğü içe aktar</string>
+    <string name="dict_personal_import_mode_message">Birleştir seçeneği dosyadaki sayımları mevcut öğrenilenlere ekler. Değiştir seçeneği önce bu dildeki tüm öğrenilmiş kelimeleri siler.</string>
+    <string name="dict_personal_import_merge">Birleştir</string>
+    <string name="dict_personal_import_replace">Değiştir</string>
+    <string name="dict_import_note">Helium314/aosp-dictionaries kaynağından AOSP wordlist.combined dosyasını içe aktarır. Telefon üzerindeki sözlükle birleştirilir; kısaltmalar, saldırgan ifadeler ve yerleşik kelimedeki aksanları kaybeden yazımlar çıkarılır. Kelime çiftleri yerleşik listedeki gibi kalır.</string>
+    <string name="dict_clear_phrases">Öğrenilen ifade çiftlerini temizle</string>
+    <string name="dict_clear_phrases_confirm">Kinetica’nın %1$s dili için öğrendiği tüm kelime çiftleri silinsin mi? Öğrenilen kelimeler korunur.</string>
+    <string name="pref_learn_phrases_title">Yazdığınız ifadeleri öğren</string>
+    <string name="pref_learn_phrases_summary">Sıradaki kelimeyi daha iyi tahmin etmek için hangi kelimeden sonra hangisini yazdığınızı bu cihazda hatırlar. Sözlük dışa aktarımına dahil edilmez.</string>
+    <string name="backup_heading">Her şeyi yedekle</string>
+    <string name="backup_settings_title">Yedekleme</string>
+    <string name="pref_backup_summary">Tüm ayarlar, öğrenilen kelimeler ve kısayollar tek dosyada: dışa aktarın, geri yükleyin veya son geri yüklemeyi geri alın.</string>
+    <string name="backup_note">Başka telefona taşımak için tüm ayarları, öğrenilen ve engellenen kelimeleri, tuş birleşimlerini, kenar kaydırmalarını ve metin genişletmelerini içeren tek dosya. İçe aktarılan sözlükler dahil değildir; kaynak dosyadan yeniden aktarın.</string>
+    <string name="backup_restore">Son içe aktarmayı geri al (%1$s)</string>
+    <string name="backup_restore_title">Son içe aktarmayı geri al</string>
+    <string name="backup_restore_message">Klavye son içe aktarmadan önceki hâline döner. O zamandan beri öğrenilen kelimeler kaybolur.</string>
+    <string name="backup_restore_done">Klavye önceki hâline döndürüldü</string>
+    <string name="backup_restore_failed">Kaydedilen kopya okunamadı</string>
+    <string name="backup_export">Yedeği dışa aktar…</string>
+    <string name="backup_import">Yedeği geri yükle…</string>
+    <string name="backup_export_done">Yedek yazıldı: %1$d kayıt</string>
+    <string name="backup_export_partial">Yedek yazıldı: %1$d kayıt, %2$d kayıt atlandı</string>
+    <string name="backup_export_failed">Yedekleme başarısız: dosya yazılamadı</string>
+    <string name="backup_import_not_backup">Kinetica yedek dosyası değil</string>
+    <string name="backup_import_too_new">Bu yedek Kinetica’nın daha yeni bir sürümünde oluşturulmuş</string>
+    <string name="backup_import_done">Geri yüklendi: %1$d kelime, %2$d ayar</string>
+    <string name="backup_progress_title">Geri yükleniyor</string>
+    <string name="backup_progress_reading">Yedek okunuyor…</string>
+    <string name="backup_progress_saving">Önce mevcut klavyenin kopyası kaydediliyor…</string>
+    <string name="backup_progress_writing">%1$d / %2$d yazılıyor</string>
+    <string name="backup_progress_keep_open">%1$s\n\nİşlem bitene kadar Kinetica’yı açık tutun.</string>
+    <string name="backup_import_done_missing_base">Geri yüklendi. Şu diller için geliştirilmiş sözlüğü yeniden içe aktarın: %1$s</string>
+    <string name="pref_double_space_period_title">Nokta için boşluk çubuğuna iki kez dokun</string>
+    <string name="pref_double_space_period_summary">Boşluk çubuğuna hızlıca iki kez dokunmak çift boşluk yerine cümleyi noktayla bitirir. Satır başında ve noktalama işaretlerinden sonra çalışmaz.</string>
+    <string name="pref_spaceless_space_title">Boşluk çubuğunun solunda boşluksuz boşluk</string>
+    <string name="pref_spaceless_space_summary">Boşluk çubuğunun sol üçte birlik kısmı kelimeyi boşluk eklemeden bitirir. Böylece sözlükte olmayan birleşik kelimeleri iki parça hâlinde kaydırabilirsiniz.</string>
+    <string name="pref_spacebar_step_title">Boşluk çubuğunda kaydırma mesafesi</string>
+    <string name="pref_spacebar_step_summary">İmleci bir adım hareket ettirmek için boşluk çubuğunda kaydırılması gereken mesafe. Daha düşük değer daha hızlıdır.</string>
+    <string name="pref_alternate_swipes_title">Yönlü rakam/sembol kaydırmaları</string>
+    <string name="pref_alternate_swipes_summary">Üst sıradaki harfte yukarı veya alt sıradaki harfte aşağı kaydırarak tuşun küçük karakterini yazın. Kişisel kenar kaydırmaları önceliklidir.</string>
+    <string name="pref_apostrophe_key_title">Kesme işareti tuşu</string>
+    <string name="pref_apostrophe_key_summary">L tuşunun sağına dar bir kesme işareti tuşu ekler; simgeler katmanına geçmeden kesmeli kelimeler yazabilirsiniz.</string>
+    <string name="edge_swipe_settings_title">Kenar kaydırma kısayolları</string>
+    <string name="pref_edge_swipes_summary">Bir tuşun kenarından hızlıca kaydırarak metin yazın, işlem çalıştırın veya Ctrl ile bir tuşa basın.</string>
+    <string name="edge_swipe_hint">İşlemi çalıştırmak için tuşun üzerinde gösterilen yönde kaydırın.</string>
+    <string name="edge_swipe_empty_hint">Tanımlı kenar kaydırması yok. Bir tane ekleyin veya varsayılanlara dönün.</string>
+    <string name="edge_swipe_add">Kenar kaydırması ekle</string>
+    <string name="edge_swipe_reset">Kenar kaydırmalarını sıfırla</string>
+    <string name="edge_swipe_reset_confirm">Tüm kenar kaydırmaları varsayılanlara döndürülsün mü?</string>
+    <string name="edge_swipe_shadow_cursor">İmleci taşı</string>
+    <string name="edge_swipe_shadow_delete">Sil</string>
+    <string name="edge_swipe_shadow_layer">Katmanı değiştir</string>
+    <string name="edge_swipe_shadow_enter">Enter</string>
+    <string name="edge_swipe_shadow_typing">Yazma modu</string>
+    <string name="edge_swipe_key_label">Tuş</string>
+    <string name="edge_swipe_direction_label">Yön</string>
+    <string name="edge_swipe_action_label">İşlem</string>
+    <string name="edge_swipe_action_emoji">Emoji</string>
+    <string name="edge_swipe_text_hint">Yazılacak metin</string>
+    <string name="edge_swipe_dir_up">Yukarı</string>
+    <string name="edge_swipe_dir_down">Aşağı</string>
+    <string name="edge_swipe_dir_left">Sol</string>
+    <string name="edge_swipe_dir_right">Sağ</string>
+    <string name="pref_emoji_key_title">Emoji tuşu</string>
+    <string name="pref_emoji_key_summary">Klavyeye emoji tuşu ekler.</string>
+    <string name="pref_comma_mode_title">Virgül tuşu davranışı</string>
+    <string name="pref_comma_mode_summary">Virgül tuşunun ne yazacağını veya hangi işlemi yapacağını seçin.</string>
+    <string name="pref_period_mode_title">Nokta tuşu davranışı</string>
+    <string name="pref_period_mode_summary">Nokta tuşunun ne yazacağını veya hangi işlemi yapacağını seçin.</string>
+    <string name="emoji_recent">Son kullanılanlar</string>
+    <string name="theme_preview_note_custom">Özel tema önizlemesi</string>
+    <string name="theme_preview_note_fixed">Sabit tema önizlemesi</string>
+
+
+    <string name="tip_letter_lists_title">Harf tuşuna basılı tutunca çıkan karakterleri seçin</string>
+    <string name="tip_letter_lists_summary">Uzun basma menüsü ayarlarından her harfin alternatif karakter listesini düzenleyin.</string>
+    <string name="tip_ctrl_title">Ctrl ve bir tuş</string>
+    <string name="tip_ctrl_summary">Bir tuş birleşimine veya kenar kaydırmasına Ctrl + tuş atayın; ardından a, c, v ya da Del gibi bir tuşa basın.</string>
+    <string name="pref_trail_custom_hue_title">Özel kaydırma izi tonu (derece)</string>
+    <string name="pref_retype_button_dp_title">Yeniden yazma düğmesinin genişliği</string>
+    <string name="pref_retype_button_dp_summary">Telefon kılıfı varken geniş düğmeye basmak daha kolaydır. Her dp değeri öneri alanından düşülür.</string>
+    <string name="slider_value_ms">%1$d ms</string>
+    <string name="pref_group_learning_title">Öğrenme</string>
+    <string name="pref_group_learning_summary">Kişisel sözlük ve yazılan ifadeler</string>
+    <string name="pref_group_key_symbols_summary">Tuşlardaki alternatif karakterler ve semboller</string>
+    <string name="contribute_title">Katkıda bulunun</string>
+    <string name="pref_contribute_summary">Kinetica’nın geliştirilmesine yardımcı olun</string>
+    <string name="contribute_text">Kinetica açık kaynaklı bir projedir. Hata bildirerek, öneride bulunarak veya projeye katkı sağlayarak gelişmesine yardımcı olabilirsiniz.</string>
+    <string name="contribute_no_browser">Bağlantıyı açabilecek bir tarayıcı bulunamadı. Bağlantı: %1$s</string>
+    <string name="pref_chord_arm_title">Tuş birleşimlerini etkinleştir</string>
+    <string name="pref_chord_arm_summary">Tuş birleşimlerini kullanmak için basılı tutma hareketini etkinleştirir.</string>
+    <string name="pref_space_chord_arm_title">Boşluk tuşuyla birleşimleri etkinleştir</string>
+    <string name="pref_space_chord_arm_summary">Boşluk tuşuna basılı tutup başka bir tuşa dokunarak birleşim çalıştırın.</string>
+    <string name="chord_trigger_label">Tetikleyici</string>
+    <string name="chord_trigger_mode">Katman tuşu</string>
+    <string name="chord_trigger_space">Boşluk</string>
+    <string name="chord_group_mode">\?123 menüsü</string>
+    <string name="chord_group_space">Boşluk tuşu</string>
+    <string name="chord_row_text">%1$s → %2$s</string>
+    <string name="chord_settings_title">Tuş birleşimleri</string>
+    <string name="chord_lead_in_value">%1$d ms bekleme</string>
+    <string name="chord_sort_key_asc">Tuşa göre artan</string>
+    <string name="chord_sort_key_desc">Tuşa göre azalan</string>
+    <string name="chord_sort_function">İşleme göre sırala</string>
+    <string name="pref_chords_summary">Bir tuşa basılı tutarken diğerine dokunarak metin veya işlem çalıştırın.</string>
+    <string name="chord_add">Birleşim ekle</string>
+    <string name="chord_edit">Birleşimi düzenle</string>
+    <string name="chord_delete">Birleşimi sil</string>
+    <string name="chord_letter_label">Harf veya tuş</string>
+    <string name="shortcut_key_hint">Bir tuş seçin</string>
+    <string name="shortcut_key_error_blank">Tuş boş bırakılamaz.</string>
+    <string name="shortcut_key_error_many">%1$s yerine yalnızca tek bir tuş girin.</string>
+    <string name="chord_key_taken">%1$s için zaten bir tuş birleşimi tanımlı.</string>
+    <string name="shortcut_key_or">veya</string>
+    <string name="shortcut_key_enter">Enter</string>
+    <string name="shortcut_key_backspace">Geri sil</string>
+    <string name="shortcut_key_shift">Shift</string>
+    <string name="chord_kind_label">Birleşim türü</string>
+    <string name="chord_kind_text">Metin yaz</string>
+    <string name="chord_kind_combo">Tuş veya işlem</string>
+    <string name="combo_key_unsendable">Bu tuş yazılan alana gönderilemiyor.</string>
+    <string name="combo_key_hint">Ctrl ile kullanılacak tuş: c, v, a, Del, Backspace, Tab, Left, Home…; Shift+ veya Alt+ öne eklenebilir</string>
+    <string name="chord_kind_paste">Yapıştır</string>
+    <string name="chord_kind_copy">Kopyala</string>
+    <string name="chord_kind_cut">Kes</string>
+    <string name="chord_kind_select_all">Tümünü seç</string>
+    <string name="chord_kind_retype">Yeniden yaz</string>
+    <string name="chord_kind_expandify">Metni genişlet</string>
+    <string name="action_undo">Geri al</string>
+    <string name="action_redo">Yinele</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="action_next_language">Sonraki dil</string>
+    <string name="action_toggle_autospace">Otomatik boşluğu aç/kapat</string>
+    <string name="action_one_handed">Tek elle kullanım</string>
+    <string name="action_date">Tarih</string>
+    <string name="action_time">Saat</string>
+    <string name="action_enter">Enter</string>
+    <string name="action_copy_line">Satırı kopyala</string>
+    <string name="notice_undo">Geri al</string>
+    <string name="notice_redo">Yinele</string>
+    <string name="notice_paste">Yapıştır</string>
+    <string name="notice_copy">Kopyala</string>
+    <string name="notice_cut">Kes</string>
+    <string name="notice_select_all">Tümünü seç</string>
+    <string name="notice_retype">Yeniden yaz</string>
+    <string name="notice_expand">Metni genişlet</string>
+    <string name="notice_autospace_on">Otomatik boşluk açık</string>
+    <string name="notice_toggle_on">%1$s açık</string>
+    <string name="notice_toggle_off">%1$s kapalı</string>
+    <string name="notice_name_next_word">Sıradaki kelime önerisi</string>
+    <string name="notice_name_recent_words">Son kelimeler</string>
+    <string name="notice_name_number_row">Sayı satırı</string>
+    <string name="notice_name_tidy_spaces">Boşlukları düzenle</string>
+    <string name="action_toggle_next_word">Sıradaki kelime önerisini aç/kapat</string>
+    <string name="action_toggle_recent_words">Son kelimeleri aç/kapat</string>
+    <string name="action_toggle_number_row">Sayı satırını aç/kapat</string>
+    <string name="action_toggle_tidy_spaces">Boşluk düzenlemeyi aç/kapat</string>
+    <string name="action_toggle_peck_mode">Tek tek yazma modunu aç/kapat</string>
+    <string name="action_toggle_typing_speed">Yazma hızını değiştir</string>
+    <string name="action_tab">Sekme</string>
+    <string name="action_backspace">Geri sil</string>
+    <string name="action_ctrl_next">Ctrl tuşu</string>
+    <string name="action_escape">Escape</string>
+    <string name="action_forward_delete">İleri sil</string>
+    <string name="action_home">Başlangıç</string>
+    <string name="action_end">Son</string>
+    <string name="action_arrow_up">Yukarı ok</string>
+    <string name="action_arrow_down">Aşağı ok</string>
+    <string name="action_arrow_left">Sol ok</string>
+    <string name="action_arrow_right">Sağ ok</string>
+    <string name="action_page_up">Önceki sayfa</string>
+    <string name="action_page_down">Sonraki sayfa</string>
+    <string name="notice_name_peck_mode">Tek tek yazma modu</string>
+    <string name="notice_name_typing_speed">Yazma hızı</string>
+    <string name="pref_no_primary_title">Öncelikli dil yok</string>
+    <string name="pref_no_primary_summary">Dil değiştiricide ilk sırada bir dil seçilmez.</string>
+    <string name="pref_typing_speed_title">Yazma hızı</string>
+    <string name="pref_typing_speed_summary">Dokunma ve kaydırma hareketlerinin ne kadar hızlı yorumlanacağını ayarlar.</string>
+    <string name="typing_speed_label">%d kelime/dk</string>
+    <string name="notice_autospace_off">Otomatik boşluk kapalı</string>
+    <string name="notice_date">Tarih eklendi</string>
+    <string name="notice_time">Saat eklendi</string>
+    <string name="notice_enter">Enter</string>
+    <string name="notice_copy_line">Satır kopyalandı</string>
+    <string name="notice_tab">Sekme</string>
+    <string name="notice_backspace">Geri sil</string>
+    <string name="notice_name_ctrl">Ctrl</string>
+    <string name="notice_escape">Escape</string>
+    <string name="notice_forward_delete">İleri sil</string>
+    <string name="notice_home">Başlangıç</string>
+    <string name="notice_end">Son</string>
+    <string name="notice_arrow_up">Yukarı</string>
+    <string name="notice_arrow_down">Aşağı</string>
+    <string name="notice_arrow_left">Sol</string>
+    <string name="notice_arrow_right">Sağ</string>
+    <string name="notice_page_up">Önceki sayfa</string>
+    <string name="notice_page_down">Sonraki sayfa</string>
+    <string name="clip_label_line">Satır</string>
+    <string name="pref_bar_actions_title">Öneri çubuğu kısayolları</string>
+    <string name="pref_next_word_title">Sıradaki kelimeyi öner</string>
+    <string name="pref_recent_words_title">Son kelimeleri çubukta göster</string>
+    <string name="size_preview_portrait">Dikey</string>
+    <string name="size_preview_landscape">Yatay</string>
+    <string name="expansion_more_targets_note">Var olan bir tetikleyiciye bu hedef de eklenir; klavye daha sonra hedefleri çubukta sunar.</string>
+    <string name="tutor_title">İki başparmakla yazmayı deneyin</string>
+    <string name="tutor_summary">Beş kelimeyi, her başparmağın hareketini gösteren alıştırma alanında yazın.</string>
+    <string name="tutor_step">%1$d / %2$d kelime: %3$s</string>
+    <string name="tutor_field_hint">Kelimeyi Kinetica ile buraya yazın</string>
+    <string name="tutor_skip">Sonraki kelime</string>
+    <string name="tutor_well_done">Tamamlandı.</string>
+    <string name="tutor_hint_one_thumb">Tek başparmak: parmağınızı kaldırmadan tüm harflerin üzerinden kaydırın, sonra kaldırın.</string>
+    <string name="tutor_hint_swipe_and_tap">Sol başparmak kendi harflerinde kaydırırken sağ başparmak kendi harflerine dokunur.</string>
+    <string name="tutor_hint_two_swipes">Her başparmak kendi yarısındaki harflerde aynı anda veya sırayla kaydırma yapar.</string>
+    <string name="tutor_hint_mixed">Bir kelimede hem dokunma hem kaydırma kullanın: sayıları izleyin, halka dokunmayı gösterir.</string>
+    <string name="tutor_hint_alternate">Başparmaklar harf harf sırayla devralır. Düzenli bir ritim tutturun.</string>
+    <string name="pref_tidy_spaces_title">Boşlukları düzenle</string>
+    <string name="pref_enter_action_title">Enter uygulamanın işlemini çalıştırsın</string>
+    <string name="pref_enter_action_summary">Alan arama, gönderme veya ilerleme istiyorsa Enter bunu yapar ve tuşta gösterir. Yeni satır için basılı tutun. Kapalıysa çok satırlı alanlarda yeni satır eklenir.</string>
+    <string name="enter_label_search">Ara</string>
+    <string name="enter_label_send">Gönder</string>
+    <string name="enter_label_go">Git</string>
+    <string name="enter_label_next">İleri</string>
+    <string name="enter_label_done">Bitti</string>
+    <string name="enter_label_previous">Geri</string>
+    <string name="pref_tidy_spaces_summary">Arka arkaya iki boşluk oluşmasını önler. İkinci boşluk atılır veya çift boşlukla nokta özelliği açıksa cümleyi bitirir. Kapanış tırnağı ya da parantezinden önce otomatik boşluk eklenmez.</string>
+    <string name="pref_number_row_title">Sayı satırı</string>
+    <string name="pref_number_row_summary">Harflerin üstünde yalnızca dokunarak kullanılabilen ayrı rakam satırı gösterir. Harflerin boyutu korunur.</string>
+    <string name="pref_recent_words_summary">Son iki kelime, yerlerine geçebilecek seçeneklerle birlikte çubuğun solunda kalır. Değiştirmek için birine dokunun; çubuk gerektiğinde genişler.</string>
+    <string name="pref_next_word_summary">Yazma yokken kısayollar yerine genellikle sıradaki kelimeler gösterilir. Son kelimeler açıksa bu öneriler her kelimeden sonra gelir.</string>
+    <string name="pref_bar_actions_summary">Gösterilecek öneri olmadığında görünür. Her işlem tuş birleşimine veya kenar kaydırmasına da atanabilir.</string>
+    <string name="pref_menu_actions_title">\?123 uzun basma menüsündeki kısayollar</string>
+    <string name="shortcut_set_intro">Görünmesini istediğiniz kısayolları işaretleyin; oklar sıralarını değiştirir. Yer kalmadığında ilk sıradakiler korunur.</string>
+    <string name="shortcut_move_up">Yukarı taşı</string>
+    <string name="shortcut_move_down">Aşağı taşı</string>
+    <string name="pref_menu_actions_summary">\?123 tuşuna basılı tutup bir seçeneğe kaydırın. Çubuktan ayrı ayarlanır; böylece çubuktan dişliyi kaldırıp menüde tutabilirsiniz.</string>
+    <string name="expansion_settings_title">Metin genişletmeleri</string>
+    <string name="pref_expansions_summary">Kısa bir kısayolu bağlantı veya birkaç satır gibi uzun metne dönüştürür. Kenar kaydırması, tuş birleşimi veya çubuktaki Genişlet işlemiyle çalışır.</string>
+    <string name="expansion_intro">Genişletme, imlecin bulunduğu yerdeki tetikleyici metni değiştirir. Çalıştırmak için kenar kaydırmasına, tuş birleşimine veya çubuğa Genişlet işlemini atayın. Bir hedef başka tetikleyici olabilir; böylece zincirleme genişletme yapılır.</string>
+    <string name="expansion_filter_hint">Tetikleyiciye veya hedefe göre filtrele</string>
+    <string name="expansion_empty">Henüz metin genişletmesi yok.</string>
+    <string name="expansion_no_match">Bu aramayla eşleşen genişletme yok.</string>
+    <string name="expansion_add">Genişletme ekle</string>
+    <string name="expansion_trigger_label">Tetikleyici</string>
+    <string name="expansion_trigger_hint">Yazacağınız kısa metin</string>
+    <string name="expansion_target_label">Hedef</string>
+    <string name="expansion_target_hint">Yerine eklenecek metin</string>
+    <string name="expansion_bad_trigger">Boş olamaz ve 32 karakterden uzun olamaz. Boşluklar kaldırılır.</string>
+    <string name="chord_expansion_hint">Genişletilecek metin</string>
+    <string name="chord_empty_hint">Atanmış tuş birleşimi yok. Bir tane ekleyene kadar özellik kapalı kalır.</string>
+    <string name="chord_list_hint">Tetikleyiciye basılı tutup ardından tuşa dokunun. Sembol sayfasında \?123 sayfa tuşudur.</string>
+    <string name="pref_group_longpress_title">Uzun basma menüleri</string>
+    <string name="pref_group_longpress_summary">Izgara veya şerit görünümü ve harfe basılı tutunca sunulan karakterler.</string>
+    <string name="pref_letter_alternates_note_title">Her harfin karakter listesi</string>
+    <string name="pref_letter_alternates_note_summary">Karakterleri boşlukla ayırın. İlk karakter, normal uzun basma veya yukarı kaydırmayla yazılan köşe karakteridir. Boş ya da Yerleşik seçeneği varsayılan listeyi korur. Kısayollar simgeleriyle veya adlarıyla çalıştırılır: :paste :copy :cut :undo :redo :settings :retype :date :time :copy_line :tab :escape :home :end. Tüm diller için tek liste kullanılır.</string>
+    <string name="pref_edit_from_menu_title">Menüyü klavyeden düzenle</string>
+    <string name="pref_edit_from_menu_summary">Bir harfin uzun basma menüsüne basılı tutmaya devam ederek buradaki karakter listesini açın.</string>
+    <string name="pref_letter_alternates_builtin">Yerleşik: %1$s</string>
+    <string name="pref_letter_alternates_none">Yerleşik: yok</string>
+    <string name="pref_letter_alternates_default">Varsayılan: tüm etkin diller</string>
+    <string name="pref_letter_alternates_reset_title">Tüm listeleri sıfırla</string>
+    <string name="pref_letter_alternates_reset_summary">Her harfi yerleşik karakter listesine döndürür.</string>
+    <string name="pref_letter_alternates_reset_message">Her harf için düzenlediğiniz listeler temizlenir. Tüm harfler yerleşik listelerine döner.</string>
+    <string name="pref_letter_alternates_dialog_title">%1$s için uzun basma</string>
+    <string name="pref_popup_shape_title">Uzun basma menüsünün biçimi</string>
+    <string name="pref_plain_letter_alternates_title">Uzun basmada aksanlı harfleri gizle</string>
+    <string name="pref_plain_letter_alternates_summary">Harf tuşları yalnızca rakam ve sembol sunar. İtalyanca, İspanyolca, Lehçe, Çekçe, Almanca, Fransızca veya Norveççe gibi alfabesinde aksanlı harf bulunan dillerde uygulanmaz.</string>
+    <string name="pref_number_priority_title">Harf tuşlarında aksanlardan önce rakamlar</string>
+    <string name="pref_number_priority_summary">Uzun basma menüsünde önce rakam veya sembol gösterilir ve tuşun köşe ipucu olur. Böylece üst sırada yukarı kaydırmak 1–0 yazar. Kapalıysa önce aksanlar gelir.</string>
+        <plurals name="dict_word_row_suggested"><item quantity="one">%1$s · %2$d kullanım, öneriliyor</item><item quantity="other">%1$s · %2$d kullanım, öneriliyor</item></plurals>
+        <plurals name="dict_word_row_below_floor"><item quantity="one">%1$s · %2$d kullanım, %3$d seviyesinden itibaren önerilir</item><item quantity="other">%1$s · %2$d kullanım, %3$d seviyesinden itibaren önerilir</item></plurals>
+        <plurals name="dict_words_raised"><item quantity="one">%d kelimenin önceliği bir kademe artırıldı</item><item quantity="other">%d kelimenin önceliği bir kademe artırıldı</item></plurals>
+        <plurals name="dict_words_delete_confirm"><item quantity="one">%1$d öğrenilmiş kelime ve ağırlığı silinsin mi? Yeniden yazarsanız tekrar öğrenilir.</item><item quantity="other">%1$d öğrenilmiş kelime ve ağırlığı silinsin mi? Yeniden yazarsanız tekrar öğrenilir.</item></plurals>
+        <plurals name="dict_words_deleted"><item quantity="one">%1$d öğrenilmiş kelime silindi</item><item quantity="other">%1$d öğrenilmiş kelime silindi</item></plurals>
+    <string name="pref_backspace_char_slide_title">Geri sil tuşundan kaydırmak harf silsin</string>
+    <string name="pref_backspace_char_slide_summary">Geri sil tuşundan sola kaydırmak kelime yerine harfleri tek tek işaretler. Parmağınızı kaldırana kadar silinmez; geri kaydırmak işlemi iptal eder.</string>
+    <string name="pref_retype_button_title">Öneri çubuğunda yeniden yaz düğmesi</string>
+    <string name="pref_retype_button_summary">Çubuğun sağındaki ↻ düğmesi, yazmakta olduğunuz veya az önce tamamladığınız kelimeyi geri alır; yeniden kaydırabilirsiniz.</string>
+    <string name="pref_spacebar_word_slide_title">Boşluk çubuğunda kaydırma kelime kelime ilerletsin</string>
+    <string name="pref_spacebar_word_slide_summary">Boşluk çubuğunda kaydırmak imleci birer kelime taşır. Noktalama işaretleri kelimeyle birlikte hareket eder.</string>
+    <string name="backup_include_phrases">%1$d öğrenilmiş ifade çiftini dahil et</string>
+    <string name="backup_import_message">Birleştir, bu telefondaki verilere ekleme yapar. Değiştir, önce öğrenilen kelimeleri ve ifadeleri temizler. Her iki durumda da ayarlar ve kısayollar değiştirilir. Geri alınabilmesi için önce mevcut klavye kaydedilir.</string>
+    <string name="pref_enter_alternates_title">Enter tuşunda yukarı kaydırma sembolleri</string>
+    <string name="pref_enter_alternates_summary">Boşlukla ayrılmış en fazla üç sembol (varsayılan: \"? ! ,\"). İlki Enter tuşunun üstünde görünür ve yukarı kaydırmayla eklenir; sola kaydırmak diğerlerini seçer.</string>
+    <string name="edge_swipe_shadow_note">%1$s hareketinin yerini alır</string>
+    <string name="pref_period_alternates_title">Nokta alternatifleri</string>
+    <string name="pref_comma_alternates_title">Virgül alternatifleri</string>
+    <string name="pref_punctuation_alternates_summary">Alternatif noktalama işaretlerini uzun basma menüsünde gösterin.</string>
+    <string name="pref_period_custom_title">Özel nokta davranışı</string>
+    <string name="pref_period_custom_summary">Nokta tuşuna dokunulduğunda yapılacak işlemi özelleştirin.</string>
+    <string name="pref_comma_custom_title">Özel virgül davranışı</string>
+    <string name="pref_comma_custom_summary">Virgül tuşuna dokunulduğunda yapılacak işlemi özelleştirin.</string>
+
+    <string name="dict_add_personal">Sözlüğe kelime ekle</string>
+    <string name="dict_add_personal_title">%1$s sözlüğüne kelime ekle</string>
+    <string name="dict_add_personal_hint">Eklenecek kelime</string>
+    <string name="dict_add_personal_invalid">Yalnızca harflerden oluşan, içinde isteğe bağlı kesme işareti bulunan bir kelime girin.</string>
+    <string name="dict_add_personal_done">“%1$s” kişisel sözlüğe eklendi.</string>
+    <string name="pref_group_quick_profiles_title">Hızlı klavye ayarları</string>
+    <string name="pref_group_quick_profiles_summary">Tek dokunuşla sık kullanılan bir klavye düzenini uygulayın.</string>
+    <string name="quick_profile_standard_title">Dengeli</string>
+    <string name="quick_profile_standard_summary">Standart boyut, otomatik boşluk, büyük harf ve sıradaki kelime önerileri.</string>
+    <string name="quick_profile_large_title">Büyük tuşlar</string>
+    <string name="quick_profile_large_summary">Daha yüksek klavye, rakam satırı ve temel yazma yardımcıları.</string>
+    <string name="quick_profile_one_hand_title">Tek elle kullanım</string>
+    <string name="quick_profile_one_hand_summary">Klavye daha dar, tek elle kullanılabilen düzene geçer.</string>
+    <string name="quick_profile_standard_applied">Dengeli profil uygulandı.</string>
+    <string name="quick_profile_large_applied">Büyük tuşlar profili uygulandı.</string>
+    <string name="quick_profile_one_hand_applied">Tek elle kullanım profili uygulandı.</string>
+    <string name="action_clipboard_history">Pano geçmişi</string>
+    <string name="clipboard_history_empty">Bu klavye oturumunda Kinetica ile kopyalanmış bir metin yok.</string>
+    <string name="clipboard_history_label">Pano geçmişi öğesi</string>
+    <string name="quick_profile_symbols_title">Hızlı rakam ve semboller</string>
+    <string name="quick_profile_symbols_summary">Rakam satırını gösterir, uzun basma menülerinde rakamları öne alır, yönlü sembol kaydırmalarını ve kesme işareti tuşunu açar.</string>
+    <string name="quick_profile_symbols_applied">Hızlı rakam ve sembol ayarları açıldı.</string>
+</resources>

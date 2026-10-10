@@ -1,0 +1,64 @@
+name: APK Derle
+
+# Testsiz, hızlı derleme: sadece debug APK üretir (test ve lint çalışmaz).
+# Türkçe sözlük (tr_wordlist.txt) ve bigram (tr_bigrams.txt) dosyaları
+# depoya hazır eklidir; internetten indirme / üretme adımı yoktur.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-apk:
+    name: Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kaynak kodu al
+        uses: actions/checkout@v4
+
+      - name: Java 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Gradle wrapper'ı çalıştırılabilir yap
+        run: chmod +x ./gradlew
+
+      - name: Gradle hazırla
+        uses: gradle/actions/setup-gradle@v3
+
+      # Türkçe dosyalar eksik/küçük kalırsa APK sessizce 378 kelimelik
+      # tohum sözlükle derlenmesin diye kontrol.
+      - name: Türkçe sözlük dosyalarını kontrol et
+        run: |
+          set -euo pipefail
+          words=$(wc -l < app/src/main/assets/dictionaries/tr_wordlist.txt)
+          bigrams=$(wc -l < app/src/main/assets/dictionaries/tr_bigrams.txt)
+          echo "tr_wordlist: $words satır, tr_bigrams: $bigrams satır"
+          test "$words" -gt 100000
+          test "$bigrams" -gt 50000
+
+      - name: Debug APK derle (testsiz)
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: APK'yı adlandır
+        run: cp app/build/outputs/apk/debug/app-debug.apk kinetica-debug.apk
+
+      - name: APK artifact olarak yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinetica-debug-apk
+          path: kinetica-debug.apk
+          if-no-files-found: error
+          retention-days: 14

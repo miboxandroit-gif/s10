@@ -1,0 +1,301 @@
+package com.kinetica.keyboard.settings
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+/**
+ * The backup format, round-tripped.
+ *
+ * A restore rewrites every setting a user has, so this format checks its own version, unlike
+ * the personal-dictionary export.
+ *
+ * Pure because [Backup] is: no Android, no `org.json` (which the JVM runtime stubs), no file.
+ */
+class BackupTest {
+
+    private fun sample() = Backup.Data(
+        prefs = listOf(
+            Backup.Pref("pref_autospace", Backup.PrefType.BOOL, "true"),
+            Backup.Pref("pref_keyboard_height_pct", Backup.PrefType.INT, "42"),
+            Backup.Pref("pref_language", Backup.PrefType.STRING, "it"),
+            Backup.Pref("pref_enabled_languages", Backup.PrefType.SET, "en,it"),
+            // A value that is legitimately empty: pref_comma_custom when unset.
+            Backup.Pref("pref_comma_custom", Backup.PrefType.STRING, ""),
+        ),
+        words = listOf(Backup.Word("en", "keyboard", 12), Backup.Word("it", "biologia", 3)),
+        blocked = listOf(Backup.Blocked("en", "teh")),
+        chords = listOf(
+            Backup.Chord("v", "action:paste"), Backup.Chord("s", "supercalifragilistic"),
+            // A spacebar chord travels as its stored key.
+            Backup.Chord("space:t", "action:tab"),
+        ),
+        expansions = listOf(
+            Backup.Expand("vv", 0, "✅"),
+            Backup.Expand("Today", 0, "Today:\n• \n• "),
+        ),
+        phrases = listOf(Backup.Phrase("en", "i", "am", 4)),
+        importedBase = listOf("en"),
+    )
+
+    /**
+     * Through a file, not through the Sequence.
+     *
+     * The activity writes each line followed by "\n" and reads it back with
+     * lineSequence, and that split is why a newline in a value is fatal.
+     * Handing decode the encoder's own Sequence skips it, so a raw newline would
+     * round-trip in the test and be destroyed on a real device.
+     */
+    private fun viaFile(d: Backup.Data): Sequence<String> =
+        Backup.encode(d).joinToString("\n").lineSequence()
+
+    private fun roundTrip(d: Backup.Data): Backup.Data {
+        val res = Backup.decode(viaFile(d))
+        assertTrue("expected a readable backup, got $res", res is Backup.Result.Ok)
+        return (res as Backup.Result.Ok).data
+    }
+
+    @Test
+    fun everythingSurvivesTheRoundTrip() {
+        val d = sample()
+        val back = roundTrip(d)
+        assertEquals(d.prefs, back.prefs)
+        assertEquals(d.words, back.words)
+        assertEquals(d.blocked, back.blocked)
+        assertEquals(d.chords, back.chords)
+        assertEquals(d.expansions, back.expansions)
+        assertEquals(d.phrases, back.phrases)
+        assertEquals(d.importedBase, back.importedBase)
+    }
+
+    @Test
+    fun anEmptyBackupIsStillAValidOne() {
+        // A user who has changed nothing must get a file that restores to nothing, not one
+        // that fails to parse on the other device.
+        val back = roundTrip(Backup.Data())
+        assertEquals(Backup.Data(), back)
+    }
+
+    @Test
+    fun everyPreferenceTypeKeepsItsType() {
+        // The types are not decoration: pref_enabled_languages is a StringSet, and writing
+        // it back as a String makes KeyboardConfig.from throw inside the IME's listener.
+        val back = roundTrip(sample())
+        assertEquals(Backup.PrefType.BOOL, back.prefs.first { it.key == "pref_autospace" }.type)
+        assertEquals(Backup.PrefType.INT, back.prefs.first { it.key == "pref_keyboard_height_pct" }.type)
+        assertEquals(Backup.PrefType.SET, back.prefs.first { it.key == "pref_enabled_languages" }.type)
+        assertEquals("", back.prefs.first { it.key == "pref_comma_custom" }.value)
+    }
+
+    @Test
+    fun aChordExpansionKeepsItsReservedCommand() {
+        // action: strings are how a chord runs paste instead of typing the word "paste".
+        assertEquals("action:paste", roundTrip(sample()).chords.first { it.chord == "v" }.expansion)
+    }
+
+    @Test
+    fun theHeaderComesFirstAndNamesTheFormat() {
+        val first = Backup.encode(sample()).first()
+        assertEquals("${Backup.FORMAT}\t${Backup.VERSION}", first)
+    }
+
+    @Test
+    fun somethingElseEntirelyIsRefused() {
+        for (junk in listOf(
+            sequenceOf("{\"format\":\"kinetica-personal-1\"}"),
+            sequenceOf("hello world"),
+            sequenceOf(""),
+            emptySequence(),
+        )) {
+            assertEquals(Backup.Result.NotABackup, Backup.decode(junk))
+        }
+    }
+
+    @Test
+    fun aNewerBackupIsRefusedRatherThanGuessedAt() {
+        // Reading a file this build does not understand would silently drop settings a later
+        // build wrote.
+        val res = Backup.decode(sequenceOf("${Backup.FORMAT}\t99", "pref\tbool\tpref_autospace\ttrue"))
+        assertEquals(Backup.Result.TooNew(99), res)
+    }
+
+    @Test
+    fun anOlderBackupStillReads() {
+        val res = Backup.decode(sequenceOf("${Backup.FORMAT}\t1", "word\ten\thello\t3"))
+        assertTrue(res is Backup.Result.Ok)
+        assertEquals(listOf(Backup.Word("en", "hello", 3)), (res as Backup.Result.Ok).data.words)
+    }
+
+    @Test
+    fun aLineThisBuildDoesNotKnowIsSkippedAndCounted() {
+        // Forward compatibility within a version: a record type added later must not cost
+        // the user their dictionary.
+        val res = Backup.decode(
+            sequenceOf(
+                "${Backup.FORMAT}\t1",
+                "word\ten\thello\t3",
+                "gadget\tsomething\tnew",
+                "word\ten\tbroken",
+                "word\ten\thello\tnotanumber",
+            ),
+        )
+        assertTrue(res is Backup.Result.Ok)
+        val ok = res as Backup.Result.Ok
+        assertEquals(1, ok.data.words.size)
+        assertEquals("three malformed or unknown lines", 3, ok.skipped)
+    }
+
+    @Test
+    fun aValueCarryingASeparatorIsDroppedRatherThanMangled() {
+        // Tabs and newlines are the record structure, so a value holding one cannot be
+        // written. Nothing real does, but a corrupted preference must not silently shift
+        // every field after it on the way back in.
+        val d = Backup.Data(
+            prefs = listOf(
+                Backup.Pref("pref_comma_custom", Backup.PrefType.STRING, "a\tb"),
+                Backup.Pref("pref_language", Backup.PrefType.STRING, "en"),
+            ),
+        )
+        assertEquals("one unencodable record", 1, Backup.unencodable(d))
+        val back = roundTrip(d)
+        assertEquals(1, back.prefs.size)
+        assertEquals("pref_language", back.prefs.first().key)
+    }
+
+    @Test
+    fun phrasesAreCarriedOnlyWhenTheyAreGiven() {
+        // The export leaves them out unless the box is ticked, so the encoder must not
+        // invent them and the decoder must not mind their absence.
+        val without = sample().copy(phrases = emptyList())
+        assertTrue(Backup.encode(without).none { it.startsWith("phrase\t") })
+        assertEquals(emptyList<Backup.Phrase>(), roundTrip(without).phrases)
+    }
+
+    @Test
+    fun countsBelowOneAreRefused() {
+        // A zero count means a word the user de-reinforced to nothing; importing it as a
+        // real entry would resurrect it.
+        val res = Backup.decode(
+            sequenceOf("${Backup.FORMAT}\t1", "word\ten\thello\t0", "phrase\ten\ti\tam\t0"),
+        )
+        assertTrue(res is Backup.Result.Ok)
+        val ok = res as Backup.Result.Ok
+        assertTrue(ok.data.words.isEmpty())
+        assertTrue(ok.data.phrases.isEmpty())
+        assertEquals(2, ok.skipped)
+    }
+
+    @Test
+    fun anExportFilenameCarriesItsOwnDate() {
+        // With one fixed name, each export overwrote the last unless the user renamed it.
+        assertEquals(
+            "kinetica_backup_2026-09-18_0746.txt",
+            Backup.filename(java.time.LocalDateTime.of(2026, 9, 18, 7, 46)),
+        )
+        // Zero-padded throughout, so the names sort by eye in a file picker.
+        assertEquals(
+            "kinetica_backup_2026-01-02_0003.txt",
+            Backup.filename(java.time.LocalDateTime.of(2026, 1, 2, 0, 3)),
+        )
+    }
+
+    @Test
+    fun twoExportsInOneMinuteShareAName() {
+        // Seconds would make the name unreadable, and two exports inside one minute are the
+        // same export; the picker's overwrite prompt covers it.
+        assertEquals(
+            Backup.filename(java.time.LocalDateTime.of(2026, 9, 18, 7, 46, 1)),
+            Backup.filename(java.time.LocalDateTime.of(2026, 9, 18, 7, 46, 59)),
+        )
+    }
+
+    // ---- expansions, the one record whose value may hold the separators ---------------
+    //
+    // A target may be a bullet block. The line format cannot carry a newline, so this one
+    // record escapes instead of refusing. VERSION stays at 1: decode refuses a newer file
+    // outright, so a bump would make every new backup unreadable, in full, by every build
+    // already installed.
+
+    @Test
+    fun aMultiLineTargetSurvivesTheRoundTrip() {
+        val d = Backup.Data(
+            expansions = listOf(Backup.Expand("Today", 0, "Today:\n• \n• \n")),
+        )
+        assertEquals(d.expansions, roundTrip(d).expansions)
+    }
+
+    @Test
+    fun anActionTargetSurvivesTheRoundTrip() {
+        // Expansions may fire actions (#19), stored in the same `action:` form chords use.
+        val d = Backup.Data(expansions = listOf(Backup.Expand("v", 0, "action:paste")))
+        assertEquals("action:paste", roundTrip(d).expansions.single().target)
+    }
+
+    @Test
+    fun everySeparatorAndTheEscapeItselfSurvive() {
+        val nasty = "tab\there\nline\r\nback\\slash\\n not a newline"
+        val d = Backup.Data(expansions = listOf(Backup.Expand("t", 0, nasty)))
+        assertEquals(nasty, roundTrip(d).expansions.single().target)
+    }
+
+    @Test
+    fun aMultiLineTargetIsNotCountedAsDropped() {
+        // encodable refuses newlines for every other record, so the export's "N dropped"
+        // line must not count this one.
+        val d = Backup.Data(expansions = listOf(Backup.Expand("t", 0, "a\nb")))
+        assertEquals(0, Backup.unencodable(d))
+    }
+
+    @Test
+    fun severalTargetsForOneTriggerKeepTheirOrder() {
+        val d = Backup.Data(
+            expansions = listOf(
+                Backup.Expand("heart", 0, "❤"),
+                Backup.Expand("heart", 1, "💚"),
+                Backup.Expand("heart", 2, "💙"),
+            ),
+        )
+        assertEquals(d.expansions, roundTrip(d).expansions)
+    }
+
+    @Test
+    fun theVersionIsUnchangedSoOlderBuildsStillReadWhatWeWrite() {
+        // Why expansions escape instead of bumping: an old build skips the record type it
+        // does not know and restores everything else.
+        assertEquals(1, Backup.VERSION)
+        val header = Backup.encode(sample()).first()
+        assertEquals("${Backup.FORMAT}\t1", header)
+    }
+
+    @Test
+    fun aFileFromBeforeExpansionsStillReads() {
+        val res = Backup.decode(
+            sequenceOf(
+                "${Backup.FORMAT}\t1",
+                "chord\tv\taction:paste",
+                "word\ten\thello\t3",
+            ),
+        )
+        assertTrue(res is Backup.Result.Ok)
+        val ok = res as Backup.Result.Ok
+        assertEquals(0, ok.skipped)
+        assertEquals(emptyList<Backup.Expand>(), ok.data.expansions)
+    }
+
+    @Test
+    fun aMalformedExpansionIsSkippedNotFatal() {
+        val res = Backup.decode(
+            sequenceOf(
+                "${Backup.FORMAT}\t1",
+                "expand\tvv",
+                "expand\tvv\tnotanumber\tx",
+                "expand\t\t0\tx",
+                "expand\tok\t0\tgood",
+            ),
+        )
+        val ok = res as Backup.Result.Ok
+        assertEquals(3, ok.skipped)
+        assertEquals(listOf(Backup.Expand("ok", 0, "good")), ok.data.expansions)
+    }
+
+}

@@ -1,0 +1,117 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # ubuntu-latest ships an Android SDK with platform 34 / build-tools
+      # 34.0.0 preinstalled; ANDROID_HOME is exported by the runner image.
+
+      - uses: gradle/actions/setup-gradle@v3
+      - name: Gradle wrapper'ı çalıştırılabilir yap
+        run: chmod +x ./gradlew
+      - name: Test dictionary generator
+        run: python3 -m unittest discover -s tools -p 'test_*.py'
+
+      - name: Download Apache-licensed AOSP Turkish dictionary
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="$RUNNER_TEMP/main_tr.combined"
+          downloaded=false
+          for branch in master main; do
+            url="https://codeberg.org/Helium314/aosp-dictionaries/raw/branch/${branch}/wordlists/main_tr.combined"
+            if curl --fail --location --silent --show-error --retry 2 --output "$target" "$url"; then
+              downloaded=true
+              break
+            fi
+          done
+          test "$downloaded" = true
+          test -s "$target"
+          echo "Downloaded AOSP Turkish wordlist: $(wc -l < "$target") rows"
+
+      - name: Download Turkish corpus inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 2 \
+            https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/tr/tr_50k.txt \
+            --output "$RUNNER_TEMP/tr_50k.txt"
+          curl --fail --location --silent --show-error --retry 2 \
+            https://downloads.tatoeba.org/exports/per_language/tur/tur_sentences.tsv.bz2 \
+            --output "$RUNNER_TEMP/tur_sentences.tsv.bz2"
+          test -s "$RUNNER_TEMP/tr_50k.txt"
+          test -s "$RUNNER_TEMP/tur_sentences.tsv.bz2"
+
+      - name: Generate base Turkish dictionary
+        run: >-
+          python3 tools/generate_assets.py --lang tr
+          --wordlist-file "$RUNNER_TEMP/tr_50k.txt"
+          --bigrams-file "$RUNNER_TEMP/tur_sentences.tsv.bz2"
+          --merge-aosp "$RUNNER_TEMP/main_tr.combined"
+
+      - name: Build bounded Zemberek morphology generator
+        run: mvn -f tools/turkish-morphology/pom.xml -q package dependency:copy-dependencies
+
+      - name: Generate bounded Turkish inflection candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p app/build/turkish-reports
+          java -Xmx1g \
+            -cp "tools/turkish-morphology/target/classes:tools/turkish-morphology/target/dependency/*" \
+            com.kinetica.tools.TurkishMorphologyWords \
+            --input app/src/main/assets/dictionaries/tr_wordlist.txt \
+            --output "$RUNNER_TEMP/tr_morphology.tsv" \
+            --max-seeds 60000 --max-roots-per-pos 1200 --max-forms 20000 \
+            | tee app/build/turkish-reports/turkish-morphology-generator.log
+
+      - name: Merge inflections and regenerate Turkish bigrams
+        run: >-
+          python3 tools/generate_assets.py --lang tr
+          --wordlist-file "$RUNNER_TEMP/tr_50k.txt"
+          --bigrams-file "$RUNNER_TEMP/tur_sentences.tsv.bz2"
+          --merge-aosp "$RUNNER_TEMP/main_tr.combined"
+          --merge-morphology "$RUNNER_TEMP/tr_morphology.tsv"
+          --max-morphology-forms 20000
+
+
+      # The project's exact green gate: build, JVM golden suite, lint.
+      - run: ./gradlew assembleDebug test lint
+
+      - name: Report Turkish swipe quality, coverage, and latency
+        if: always()
+        run: |
+          mkdir -p app/build/turkish-reports
+          python3 tools/report_swipe_eval.py app/build/test-results/testDebugUnitTest | tee app/build/turkish-reports/turkish-swipe-report.txt
+
+      - name: Upload APK and test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinetica-debug-and-turkish-reports
+          path: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/test-results/**/*.xml
+            app/build/turkish-reports/turkish-swipe-report.txt
+            app/build/turkish-reports/turkish-morphology-generator.log
+            app/src/main/assets/dictionaries/tr_wordlist.txt
+            app/src/main/assets/dictionaries/tr_bigrams.txt
+          if-no-files-found: warn
+          retention-days: 14

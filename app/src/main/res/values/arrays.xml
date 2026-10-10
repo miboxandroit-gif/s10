@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- An entries array is translated with the same count and order as its values array, which
+         holds what is stored and is never translated. -->
+    <!-- Step tables for SteppedSliderPreference, in ms. Dense where a few milliseconds
+         are felt, sparse where they are not; each holds its setting's default exactly and
+         ends where the old linear slider ended. TimingStepsTest reads them. -->
+    <string-array name="timing_steps_autospace" translatable="false">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+        <item>110</item>
+        <item>120</item>
+        <item>130</item>
+        <item>140</item>
+        <item>150</item>
+        <item>175</item>
+        <item>200</item>
+        <item>225</item>
+        <item>250</item>
+        <item>275</item>
+        <item>300</item>
+        <item>350</item>
+        <item>400</item>
+        <item>450</item>
+        <item>500</item>
+        <item>550</item>
+        <item>600</item>
+        <item>650</item>
+        <item>700</item>
+        <item>750</item>
+        <item>800</item>
+    </string-array>
+    <string-array name="timing_steps_retract" translatable="false">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+        <item>110</item>
+        <item>120</item>
+        <item>130</item>
+        <item>140</item>
+        <item>150</item>
+        <item>175</item>
+        <item>200</item>
+        <item>225</item>
+        <item>250</item>
+        <item>275</item>
+        <item>300</item>
+        <item>350</item>
+        <item>400</item>
+        <item>450</item>
+        <item>500</item>
+        <item>550</item>
+        <item>600</item>
+        <item>650</item>
+        <item>700</item>
+        <item>750</item>
+        <item>800</item>
+        <item>900</item>
+        <item>1000</item>
+        <item>1100</item>
+        <item>1200</item>
+        <item>1300</item>
+        <item>1400</item>
+        <item>1500</item>
+        <item>1600</item>
+        <item>1700</item>
+        <item>1800</item>
+        <item>1900</item>
+        <item>2000</item>
+    </string-array>
+    <string-array name="timing_steps_long_press" translatable="false">
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+        <item>110</item>
+        <item>120</item>
+        <item>130</item>
+        <item>140</item>
+        <item>150</item>
+        <item>175</item>
+        <item>200</item>
+        <item>225</item>
+        <item>250</item>
+        <item>275</item>
+        <item>300</item>
+        <item>325</item>
+        <item>350</item>
+        <item>375</item>
+        <item>400</item>
+        <item>450</item>
+        <item>500</item>
+        <item>550</item>
+        <item>600</item>
+        <item>650</item>
+        <item>700</item>
+    </string-array>
+
+    <string-array name="popup_shape_entries">
+        <item>Single row</item>
+        <item>3 x 3</item>
+        <item>4 x 3</item>
+        <item>5 x 3</item>
+    </string-array>
+    <string-array name="popup_shape_values" translatable="false">
+        <item>row</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="landscape_arrangement_entries">
+        <item>Split to the edges</item>
+        <item>Centred</item>
+        <item>Full width</item>
+    </string-array>
+    <string-array name="landscape_arrangement_values" translatable="false">
+        <item>split</item>
+        <item>centered</item>
+        <item>stretch</item>
+    </string-array>
+
+    <string-array name="layout_mode_entries">
+        <item>Full width</item>
+        <item>Right-aligned</item>
+        <item>Left-aligned</item>
+        <item>Split</item>
+        <item>One-handed</item>
+    </string-array>
+    <string-array name="layout_mode_values" translatable="false">
+        <item>full</item>
+        <item>right</item>
+        <item>left</item>
+        <item>split</item>
+        <item>one_handed</item>
+    </string-array>
+
+    <string-array name="trail_color_entries">
+        <item>Rainbow</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Green</item>
+        <item>Cyan</item>
+        <item>Violet</item>
+        <item>Custom hue</item>
+        <item>Theme colour</item>
+    </string-array>
+    <string-array name="trail_color_values" translatable="false">
+        <item>rainbow</item>
+        <item>red</item>
+        <item>orange</item>
+        <item>green</item>
+        <item>cyan</item>
+        <item>violet</item>
+        <item>custom</item>
+        <item>theme</item>
+    </string-array>
+
+    <string-array name="theme_mode_entries">
+        <item>Kinetica dark (default)</item>
+        <item>Material You (Android 12+)</item>
+        <item>Custom colour</item>
+    </string-array>
+    <string-array name="theme_mode_values" translatable="false">
+        <item>default</item>
+        <item>dynamic</item>
+        <item>custom</item>
+    </string-array>
+
+    <string-array name="theme_color_entries">
+        <item>Kinetica blue</item>
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Deep purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>Amber</item>
+        <item>Orange</item>
+        <item>Brown</item>
+    </string-array>
+    <string-array name="theme_color_values" translatable="false">
+        <item>#5468FF</item>
+        <item>#F44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#3F51B5</item>
+        <item>#2196F3</item>
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#FFC107</item>
+        <item>#FF9800</item>
+        <item>#795548</item>
+    </string-array>
+
+    <string-array name="reinforce_entries">
+        <item>Small (+1)</item>
+        <item>Medium (+5)</item>
+        <item>Large (+10)</item>
+    </string-array>
+    <string-array name="reinforce_values" translatable="false">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+
+    <string-array name="comma_mode_entries">
+        <item>Comma (default)</item>
+        <item>Removed (spacebar widens)</item>
+        <item>Custom character</item>
+        <item>Custom text</item>
+        <item>Paste</item>
+        <item>Select all</item>
+    </string-array>
+    <string-array name="comma_mode_values" translatable="false">
+        <item>keep</item>
+        <item>remove</item>
+        <item>char</item>
+        <item>text</item>
+        <item>paste</item>
+        <item>select_all</item>
+    </string-array>
+
+    <string-array name="autocorrect_entries">
+        <item>Off</item>
+        <item>Normal</item>
+        <item>Aggressive</item>
+    </string-array>
+    <string-array name="autocorrect_values" translatable="false">
+        <item>off</item>
+        <item>normal</item>
+        <item>aggressive</item>
+    </string-array>
+
+    <string-array name="dual_circle_size_entries">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="dual_circle_size_values" translatable="false">
+        <item>90</item>
+        <item>100</item>
+        <item>115</item>
+    </string-array>
+    <string-array name="dual_circle_spread_entries">
+        <item>Narrow</item>
+        <item>Normal</item>
+        <item>Wide</item>
+    </string-array>
+    <string-array name="dual_circle_spread_values" translatable="false">
+        <item>85</item>
+        <item>100</item>
+        <item>115</item>
+    </string-array>
+
+    <string-array name="dual_circle_layout_entries">
+        <item>@string/dual_circle_layout_optimized</item>
+        <item>@string/dual_circle_layout_qwerty</item>
+    </string-array>
+    <string-array name="dual_circle_layout_values" translatable="false">
+        <item>optimized</item>
+        <item>qwerty</item>
+    </string-array>
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Türkçe</item>
+    </string-array>
+    <string-array name="language_values" translatable="false">
+        <item>en</item>
+        <item>tr</item>
+    </string-array>
+    <!-- The enabled set's default: every language but the experimental ones (Prefs). -->
+    <string-array name="language_default_values" translatable="false">
+        <item>en</item>
+        <item>tr</item>
+    </string-array>
+
+
+    <string-array name="theme_brightness_entries">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>Follow system</item>
+    </string-array>
+    <string-array name="theme_brightness_values" translatable="false">
+        <item>dark</item>
+        <item>light</item>
+        <item>system</item>
+    </string-array>
+
+    <string-array name="key_arrangement_entries">
+        <item>QWERTY</item>
+        <item>QWERTZ (Y and Z swapped)</item>
+        <item>QZERTY (Z and W swapped)</item>
+        <item>AZERTY (French layout)</item>
+    </string-array>
+    <string-array name="key_arrangement_values" translatable="false">
+        <item>qwerty</item>
+        <item>qwertz</item>
+        <item>qzerty</item>
+        <item>azerty</item>
+    </string-array>
+</resources>

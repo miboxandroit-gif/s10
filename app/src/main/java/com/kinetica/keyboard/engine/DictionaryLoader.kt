@@ -1,0 +1,170 @@
+package com.kinetica.keyboard.engine
+
+import java.io.BufferedReader
+import kotlin.math.max
+
+/** One display spelling of a folded trie word, with its own quantized frequency. */
+data class WordForm(val display: String, val freqByte: Int)
+
+/**
+ * A trie over folded keys plus, for keys whose spelling differs from the key or that several
+ * spellings share ("po" vs "pò", "senti" vs "sentì"), the display variants ordered by frequency.
+ * English produces an empty map; accented languages populate it.
+ */
+class LoadedDictionary(
+    val trie: Trie,
+    val forms: Map<Int, List<WordForm>>,
+)
+
+/**
+ * Parses the bundled text assets into the runtime structures. Runs once on a
+ * background thread at IME startup (~300 ms for 47k words + 100k bigrams).
+ */
+object DictionaryLoader {
+
+    /**
+     * Lines of "word&lt;TAB&gt;count". Invalid lines are skipped, not fatal.
+     *
+     * [blocked] holds lower-cased spellings the user never wants offered. They are dropped before
+     * folding and before the trie is built, so a blocked word leaves no node and cannot be decoded,
+     * completed or suggested. The block covers [extraWords] too, since a word typed often enough
+     * comes back through them.
+     *
+     * [spellingSwaps] maps a spelling to the one the user prefers, US to UK for British English.
+     * Both spellings are in the list, so their counts are exchanged. A swap, not a multiplier: the
+     * measured ratios run 1.0x to 4.2x, so no one constant serves both "realise" and "catalogue",
+     * and an exchange leaves the frequency distribution that cross-language auto-detect compares
+     * untouched.
+     */
+    fun load(
+        reader: BufferedReader,
+        extraWords: List<Pair<String, Int>> = emptyList(),
+        blocked: Set<String> = emptySet(),
+        spellingSwaps: Map<String, String> = emptyMap(),
+        alphabet: Alphabet = Alphabet.LATIN,
+    ): LoadedDictionary {
+        // Duplicate displays (corpus word also in the user dictionary) merge
+        // by summing counts, so personal use adds to corpus evidence.
+        val countByDisplay = LinkedHashMap<String, Int>(50_000 + extraWords.size)
+        reader.forEachLine { line ->
+            val tab = line.indexOf('\t')
+            if (tab <= 0) return@forEachLine
+            val count = line.substring(tab + 1).trim().toIntOrNull() ?: return@forEachLine
+            val word = line.substring(0, tab)
+            if (word.lowercase(if (alphabet == Alphabet.TURKISH) java.util.Locale.forLanguageTag("tr-TR") else java.util.Locale.ROOT) in blocked) return@forEachLine
+            countByDisplay[word] = (countByDisplay[word] ?: 0) + count
+        }
+        // A learned spelling that only leaves the accents off a bundled word is not merged: as a
+        // form it would outrank the word it misspells, and the bundled lists drop theirs for the
+        // same reason. Rows learned earlier stay in the database and no longer reach the trie.
+        val bundledSpellings = HashSet<String>()
+        val bundledKeys = HashSet<String>()
+        if (extraWords.isNotEmpty()) {
+            for (w in countByDisplay.keys) {
+                bundledSpellings.add(w.lowercase(if (alphabet == Alphabet.TURKISH) java.util.Locale.forLanguageTag("tr-TR") else java.util.Locale.ROOT))
+                bundledKeys.add(AccentFolder.fold(w, alphabet))
+            }
+        }
+        for ((word, count) in extraWords) {
+            val lower = word.lowercase(if (alphabet == Alphabet.TURKISH) java.util.Locale.forLanguageTag("tr-TR") else java.util.Locale.ROOT)
+            if (lower in blocked) continue
+            if (AccentFolder.fold(lower, alphabet) == lower && lower !in bundledSpellings && lower in bundledKeys) continue
+            countByDisplay[word] = (countByDisplay[word] ?: 0) + count
+        }
+
+        // After both sources are counted, so a personal commit of either spelling is exchanged
+        // too. Only when the preferred spelling trails: four pairs already have it ahead
+        // ("dialogue" 5 975 against "dialog" 399), and swapping those would demote it.
+        for ((from, to) in spellingSwaps) {
+            val fromCount = countByDisplay[from] ?: continue
+            val toCount = countByDisplay[to] ?: continue
+            if (fromCount <= toCount) continue
+            countByDisplay[from] = toCount
+            countByDisplay[to] = fromCount
+        }
+
+        val byFolded = LinkedHashMap<String, ArrayList<Pair<String, Int>>>(countByDisplay.size)
+        for ((word, count) in countByDisplay) {
+            byFolded.getOrPut(AccentFolder.fold(word, alphabet)) { ArrayList(1) }.add(word to count)
+        }
+
+        // The trie node carries the strongest variant's count; weaker variants
+        // keep their own quantized frequency in the forms table.
+        var maxCount = 1L
+        val trieInput = ArrayList<Pair<String, Int>>(byFolded.size)
+        for ((folded, variants) in byFolded) {
+            val top = variants.maxOf { it.second }
+            trieInput.add(folded to top)
+            maxCount = max(maxCount, top.toLong())
+        }
+        val trie = Trie.build(trieInput, alphabet)
+
+        val forms = HashMap<Int, List<WordForm>>()
+        for ((folded, variants) in byFolded) {
+            if (variants.size == 1 && variants[0].first == folded) continue
+            val node = trie.nodeFor(folded)
+            if (node == -1) continue    // dropped at build (length/charset)
+            forms[node] = variants
+                .sortedByDescending { it.second }
+                .map { WordForm(it.first, Trie.freqByteFor(it.second, maxCount)) }
+        }
+        return LoadedDictionary(trie, forms)
+    }
+
+    /**
+     * Lines of "from<TAB>to", the spelling pair list for [load]'s spellingSwaps. Invalid lines are
+     * skipped, not fatal, as in the wordlist parser.
+     */
+    fun loadSpellingSwaps(reader: BufferedReader): Map<String, String> {
+        val out = LinkedHashMap<String, String>(200)
+        reader.forEachLine { line ->
+            val tab = line.indexOf('\t')
+            if (tab <= 0 || tab == line.length - 1) return@forEachLine
+            val from = line.substring(0, tab).trim()
+            val to = line.substring(tab + 1).trim()
+            if (from.isEmpty() || to.isEmpty() || from == to) return@forEachLine
+            out[from] = to
+        }
+        return out
+    }
+
+    /**
+     * Raw per-user commit counts (word -> count) filtered by the personal merge floor and scaled
+     * for [load]'s extraWords. Rows below PERSONAL_MERGE_MIN_COUNT, including rows de-reinforced
+     * to zero, never reach the trie; see the constant's rationale.
+     */
+    fun userWordsForMerge(rows: List<Pair<String, Int>>): List<Pair<String, Int>> =
+        rows.filter { it.second >= KineticaConstants.PERSONAL_MERGE_MIN_COUNT }
+            .map { it.first to it.second * KineticaConstants.USER_FREQ_SCALE }
+
+    /** Legacy entry point for callers that only need the trie. */
+    fun loadWordlist(
+        reader: BufferedReader,
+        extraWords: List<Pair<String, Int>> = emptyList(),
+        blocked: Set<String> = emptySet(),
+    ): Trie = load(reader, extraWords, blocked).trie
+
+    /**
+     * Lines of "w1&lt;TAB&gt;w2&lt;TAB&gt;count". Counts exceed Int range ("of the" in a
+     * web corpus), hence Long. Pairs with endpoints missing from [trie] are
+     * dropped: the table is keyed on trie node ids. Endpoints fold like
+     * wordlist entries so accented Italian bigrams resolve; [BigramTable]
+     * combines counts for spellings that resolve to the same pair.
+     */
+    fun loadBigrams(reader: BufferedReader, trie: Trie): BigramTable {
+        val entries = ArrayList<Triple<Int, Int, Long>>(100_000)
+        reader.forEachLine { line ->
+            val t1 = line.indexOf('\t')
+            if (t1 <= 0) return@forEachLine
+            val t2 = line.indexOf('\t', t1 + 1)
+            if (t2 <= t1 + 1) return@forEachLine
+            val count = line.substring(t2 + 1).trim().toLongOrNull() ?: return@forEachLine
+            val prevId = trie.nodeFor(AccentFolder.fold(line.substring(0, t1), trie.alphabet))
+            if (prevId == -1) return@forEachLine
+            val nextId = trie.nodeFor(AccentFolder.fold(line.substring(t1 + 1, t2), trie.alphabet))
+            if (nextId == -1) return@forEachLine
+            entries.add(Triple(prevId, nextId, count))
+        }
+        return BigramTable.build(entries)
+    }
+}

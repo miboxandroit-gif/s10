@@ -1,0 +1,406 @@
+{
+  "schema": 2,
+  "name": "qwerty_tr",
+  "locale": "tr_TR",
+  "script": "turkish",
+  "nativeAccents": true,
+  "fixedArrangement": true,
+  "keys": [
+    {
+      "id": "a",
+      "type": "char",
+      "label": "a",
+      "output": "a",
+      "x": 0,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "b",
+      "type": "char",
+      "label": "b",
+      "output": "b",
+      "x": 0.4,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "c",
+      "type": "char",
+      "label": "c",
+      "output": "c",
+      "x": 0.2,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "ç",
+      "type": "char",
+      "label": "ç",
+      "output": "ç",
+      "x": 0.8,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "d",
+      "type": "char",
+      "label": "d",
+      "output": "d",
+      "x": 0.18181818181818182,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "e",
+      "type": "char",
+      "label": "e",
+      "output": "e",
+      "x": 0,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "f",
+      "type": "char",
+      "label": "f",
+      "output": "f",
+      "x": 0.2727272727272727,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "g",
+      "type": "char",
+      "label": "g",
+      "output": "g",
+      "x": 0.36363636363636365,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "ğ",
+      "type": "char",
+      "label": "ğ",
+      "output": "ğ",
+      "x": 0.8,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "h",
+      "type": "char",
+      "label": "h",
+      "output": "h",
+      "x": 0.4545454545454546,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "ı",
+      "type": "char",
+      "label": "ı",
+      "output": "ı",
+      "x": 0.5,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "i",
+      "type": "char",
+      "label": "i",
+      "output": "i",
+      "x": 0.9090909090909092,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "j",
+      "type": "char",
+      "label": "j",
+      "output": "j",
+      "x": 0.5454545454545454,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "k",
+      "type": "char",
+      "label": "k",
+      "output": "k",
+      "x": 0.6363636363636364,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "l",
+      "type": "char",
+      "label": "l",
+      "output": "l",
+      "x": 0.7272727272727273,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "m",
+      "type": "char",
+      "label": "m",
+      "output": "m",
+      "x": 0.6,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "n",
+      "type": "char",
+      "label": "n",
+      "output": "n",
+      "x": 0.5,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "o",
+      "type": "char",
+      "label": "o",
+      "output": "o",
+      "x": 0.6000000000000001,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "ö",
+      "type": "char",
+      "label": "ö",
+      "output": "ö",
+      "x": 0.7000000000000001,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "p",
+      "type": "char",
+      "label": "p",
+      "output": "p",
+      "x": 0.7000000000000001,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "r",
+      "type": "char",
+      "label": "r",
+      "output": "r",
+      "x": 0.1,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "s",
+      "type": "char",
+      "label": "s",
+      "output": "s",
+      "x": 0.09090909090909091,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "ş",
+      "type": "char",
+      "label": "ş",
+      "output": "ş",
+      "x": 0.8181818181818182,
+      "y": 0.25,
+      "w": 0.09090909090909091,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "t",
+      "type": "char",
+      "label": "t",
+      "output": "t",
+      "x": 0.2,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "u",
+      "type": "char",
+      "label": "u",
+      "output": "u",
+      "x": 0.4,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "ü",
+      "type": "char",
+      "label": "ü",
+      "output": "ü",
+      "x": 0.9,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "v",
+      "type": "char",
+      "label": "v",
+      "output": "v",
+      "x": 0.30000000000000004,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "y",
+      "type": "char",
+      "label": "y",
+      "output": "y",
+      "x": 0.30000000000000004,
+      "y": 0,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "z",
+      "type": "char",
+      "label": "z",
+      "output": "z",
+      "x": 0.1,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": []
+    },
+    {
+      "id": "shift",
+      "type": "shift",
+      "label": "⇧",
+      "x": 0,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25
+    },
+    {
+      "id": "backspace",
+      "type": "backspace",
+      "label": "⌫",
+      "x": 0.9,
+      "y": 0.5,
+      "w": 0.1,
+      "h": 0.25
+    },
+    {
+      "id": "mode",
+      "type": "mode_symbols",
+      "label": "?123",
+      "x": 0,
+      "y": 0.75,
+      "w": 0.15,
+      "h": 0.25
+    },
+    {
+      "id": "comma",
+      "type": "char",
+      "label": ",",
+      "output": ",",
+      "x": 0.15,
+      "y": 0.75,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": [
+        "_",
+        "[",
+        "]",
+        "–",
+        "—"
+      ]
+    },
+    {
+      "id": "space",
+      "type": "space",
+      "label": " ",
+      "x": 0.25,
+      "y": 0.75,
+      "w": 0.5,
+      "h": 0.25
+    },
+    {
+      "id": "period",
+      "type": "char",
+      "label": ".",
+      "output": ".",
+      "x": 0.75,
+      "y": 0.75,
+      "w": 0.1,
+      "h": 0.25,
+      "alternates": [
+        "…",
+        "«",
+        "»"
+      ]
+    },
+    {
+      "id": "enter",
+      "type": "enter",
+      "label": "⏎",
+      "x": 0.85,
+      "y": 0.75,
+      "w": 0.15,
+      "h": 0.25
+    }
+  ]
+}

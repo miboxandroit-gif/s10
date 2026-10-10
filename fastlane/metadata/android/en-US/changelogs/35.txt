@@ -1,0 +1,10 @@
+- Autospace now works for tapped words, not just swipes (setting, off by default)
+- Words with apostrophes get their space: don't, it's, dell'anno
+- Single letters too: a, I, Italian e/o/i
+- A space you delete no longer comes back
+- Top-row up-flick types its digit again
+- Forward slash on the symbols page
+- Spacebar slide: adjustable speed, optional move-by-word
+- Optional retype button on the suggestion bar
+- Lower input latency, thanks pigmej
+- Macron o on the o key, thanks lucylouwebart
